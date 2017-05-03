@@ -1,27 +1,32 @@
 \section{Requerimientos funcionales}
 
-Definimos las siguientes User Stories para un potencial Product Backlog de Scrum:
+\newcommand{\BV}[0]{Business Value}
+\newcommand{\SP}{Story Points}
+\newcommand{\US}[1]{\textbf{US #1}}
+\newcommand{\fixme}[1]{\large\textcolor{red}{#1}}
+
+Definimos las siguientes User Stories para un potencial Product Backlog de Scrum, con sus respectivos Story Points y Bussiness Value. 
 
 \begin{center}
   \begin{tabular}{| r | p{10cm} | c | c | }
     \hline
-    N° & Descripción & Story Points & Business Value\\  \hline
+    N° & Descripción & Business Value & Story Points\\  \hline
     
     1  & COMO Geólogo QUIERO evaluar diferentes criterios de elección de parcelas a perforar PARA aprovechar las características físicas de los terrenos del yacimiento & 8 & 5\\  \hline
-    
+
     2  & COMO Ing. en Perforaciones QUIERO poder elegir el uso y contratación de RIGS PARA evaluar el \textit{tradeoff} entre tiempos de excavación y costos & 6 & 8\\ \hline
     
     3  & COMO Ing. Químico QUIERO elegir tiempos y criterios de construcción de las plantas separadoras PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 5 & 8\\ \hline
     
-    4 & COMO Ing. Hidráulico QUIERO planificar la construcción de los tanques de almacenamiento de agua PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 7 & 8\\ \hline
+    4 & COMO Ing. Hidráulico QUIERO planificar la construcción de los tanques de almacenamiento de agua PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
     
     5 & COMO Ing. Petroquímico QUIERO planificar la construcción de los tanques de almacenamiento de gas 
-    PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 7 & 8\\ \hline
+    PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
     
     6 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos funcionales PARA controlar 
     la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
     
-    7 & COMO Ing. Petrolífero QUIERo evaluar varias metodologías de reinyección PARA poder aprovechar 
+    7 & COMO Ing. Petrolífero QUIERO evaluar varias metodologías de reinyección PARA poder aprovechar 
     al máximo el yacimiento & 6 & 3\\ \hline
     
     8 & COMO Experto de Finanzas QUIERO poder probar distintos criterios de corte PARA saber 
@@ -34,7 +39,103 @@ Definimos las siguientes User Stories para un potencial Product Backlog de Scrum
     tener una buena predicción de la explotación & 9 & 3\\ \hline
     
     11 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular 
-    la ganancia de la explotación & 9 & 3\\ \hline
+    la ganancia de la explotación & 10 & 3\\ \hline
+    
+    %12 & COMO encargado de licitaciones QUIERO poder calcular el balance financiero de la explotacion PARA determinar el canon a cobrar & 9 & 3\\ \hline 
   \end{tabular}
 \end{center}
 
+\subsection{Discusión de las User Stories}
+
+A continuación explayamos un poco las justificaciones que nos llevaron a esta asignación de business value y story points.
+
+\begin{itemize}
+  \item Para la \textbf{US 1} creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto bussines value. Además, es una base importante para el curso de la simulación.
+  También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias. 
+	
+    \item Para la \US{2} sobre el \BV, si le presentamos al cliente un simulador donde los pozos se construyen automáticamente, sin costos y sin dificultades pero el resto de las estrategias y decisiones persisten el simulador sigue siendo un producto relativamente útil.
+
+	Las estrategias a implementar son complejas (mts/día, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc) por tanto tiene 
+    un valor alto de \SP. 
+    
+	\item Hallamos similitudes entre la \US 3, \US 4 y \US 5. Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP. Con respecto al \BV, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
+    
+    \item Sobre la \US{6} creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador, por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples. 
+    
+    \item Creemos que los criterios de reinyección para la \US{7} son sencillos 
+    de implementar, por ende su bajo \SP. Al igual que otras funcionalidades, 
+    no es tan fundamental para tener una buena estimación del canon, 
+    dado que puede hacerse ``a mano'' en un principio. 
+    
+    \item En la \US{8} también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando el log para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También es casi trivial de implementar. 
+    
+    \item Asignamos un alto \BV{} a \US 9 y \US{10}. Nos parece fundamental a la hora de plantear el canon para una licitación tener bien modelado los aspectos particulares del modelo: las características físicas del yacimiento y el estado del mercado petrolífero. A su vez, su implementación requiere simplemente parsear input del usuario, y no incluye ningún componente complejo.
+    
+    \item La \US{11} tiene el \BV{} máximo. Lo primero que quiere ver el usuario al correr una simulación es el balance económico de la explotación. Con respecto a las \SP{}, se requiere llevar la cuenta día a día, pero consideramos que esto es algo bastante fácil de implementar. 
+\end{itemize}
+
+\newpage
+\subsection{Desarrollo de las User Stories más importantes}
+
+En esta sección vamos a dar detalles de las descripciones, tareas, criterios de aceptación y estimación de RRHH para las User Stories que consideramos más importantes. Cabe aclarar que éstas podrían no necesariamente ser las que tengan una mayor relación de \( \frac{\BV{}}{\SP{}} \). Si bien tomamos en cuenta este criterio, consideramos que hay otros factores que hacen a una User Story más interesante para ser desarrollada. 
+
+Ponemos a continuación las 3 User Stories, para cada una indicamos su 
+\BV{} y \SP{} respectivamente. 
+
+% criterio de corte 
+\begin{tcolorbox}
+\textit{COMO experto de finanzas QUIERO poder probar distintos criterios de corte PARA saber cuándo conviene terminar de explotar el yacimiento [4/1]}\\
+
+\textbf{Criterios de aceptación:}
+\begin{itemize}
+	\item Si el usuario elige el corte por límite de composición de petroleo, debe ver una simulación en la que todos los días el porcentaje se mantiene por encima del valor crítico, y el día final queda un porcentaje mayor a tal valor.
+    \item Si el usuario elige el corte fijo al día $n$, debe observar una simulación con exactamente $n$ días desde el comienzo.
+\end{itemize}
+
+\textbf{Tareas:}
+\begin{itemize}
+	\item Definir e implementar el modelo para la clase abstracta de 
+    Criterio de Corte (20').
+    \item Implementar la decisión de cortar por límite de composición. (1:20 hr)
+    \item Implementar la decisión de cortar por día prefijado. (40')
+\end{itemize}
+\end{tcolorbox}
+
+% calcular produccion
+\begin{tcolorbox}
+\textit{COMO Ingeniero Petrolifero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación [10/3]}\\
+
+\textbf{Criterios de aceptación:}
+\begin{itemize}
+	\item Debe quedar registrado en el log cuántos $m^3$ de producto se extrajeron día a día en cada pozo.
+    \item Debe quedar registrado en el log cuántos $m^3$ de cada compuesto se van almacenando en tanques y cuánto de petróleo se extrajo. 
+    \item Debe quedar registrado en el log cuál es el valor total del emprendimiento hasta el día de la fecha.  
+\end{itemize}
+
+\textbf{Tareas:}
+\begin{itemize}
+	\item Considerar distintas herramientas posibles para logging e añadir la más conveniente al proyecto. 
+    \item Agregar los llamados de logging en la finalización de cada día de simulación. 
+    \item Agregar interfaces correspondientes para poder acceder a los datos necesarios a loggear. 
+\end{itemize}
+\end{tcolorbox}
+
+% caracteristicas yacimiento
+\begin{tcolorbox}
+\textit{COMO perito del yacimiento QUIERO poder modelar las caracteristicas del yacimiento PARA que la simulacion sea realista [9/3]}\\
+
+\textbf{Criterios de aceptación:}
+\begin{itemize}
+	\item En base a mediciones reales en el yacimiento virgen que se va a licitar, el perito puede seleccionar la profundidad, resistencia a RIGS y presión inicial de cada parcela.
+
+    \item También puede ajustar la composición petróleto/agua/gas y volumen inicial del yacimiento según dichas mediciones y la concentración crítica de petróleo para poder seguir funcionando.
+
+    \item Podrá instanciar los coeficientes \textit{alfa} de las ecuaciones para ajustar el potencial volumen de extracción de cada pozo.
+\end{itemize}
+
+\textbf{Tareas:}
+\begin{itemize}
+	\item Definir e implementar una interfaz de usuario, ya sea por medio de texto o gráficos. (2:30 hs)
+    \item Parsear y validar los datos ingresados por el usuario. (2 hs)
+\end{itemize}
+\end{tcolorbox}
