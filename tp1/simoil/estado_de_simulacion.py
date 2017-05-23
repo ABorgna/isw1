@@ -1,6 +1,7 @@
 class EstadoDeSimulacion(object):
     def __init__(self):
         self.excavaciones_actuales = {}
+        self.rigs_contratados = []
         self.plantas_separadoras = []
 
     def avanzar_dia():
