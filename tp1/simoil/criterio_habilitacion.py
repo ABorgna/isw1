@@ -15,7 +15,7 @@ class CriterioHabilitacionPozos(object):
 
 class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
     def extraer(self, estado_de_simulacion):
-        pozos = estado_de_simulacion.yacimiento.pozos
+        pozos = estado_de_simulacion.yacimiento.pozos_perforados
         extraccion_total = 0
         n_pozos_habilitados = len(pozos)
         for pozo in pozos:
