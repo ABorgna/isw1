@@ -1,4 +1,9 @@
 class CriterioDeReinyeccion(object):
+    def decidir_venta_de_gas(estado_de_simulacion):
+        raise('Not implemented')
+
+    def decidir_reinyeccion(estado_de_simulacion):
+        raise('Not implemented')
 
 class CriterioReinyeccionSoloAguaEnTanques(CriterioEleccionParcelas):
     def __init__(self, presion):

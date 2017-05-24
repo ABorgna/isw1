@@ -1,5 +1,9 @@
 class ConfiguracionDeSimulacion(object):
     def __init__(self):
+        self.modelos_de_tanque = []
+        self.modelos_de_rig = []
+        self.modelos_de_planta_separadora = []
+
         self.criterio_reinyeccion = pass
         self.criterio_parcelas = pass
         self.criterio_de_rigs = pass
