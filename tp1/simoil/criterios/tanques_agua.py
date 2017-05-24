@@ -1,19 +1,19 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
-class CriterioConstruccionTanquesDeGas(metaclass=ABCMeta):
+class CriterioConstruccionTanquesDeAgua(metaclass=ABCMeta):
 
     @abstractmethod
-    def construir_tanques_de_gas(estado_de_simulacion):
+    def construir_tanques_de_agua(estado_de_simulacion):
         pass
 
-class CriterioDeAhorroDeTanquesDeGas(CriterioConstruccionTanquesDeGas):
+class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
     def _init_(self):
-        self._proximo_id_tanque_de_gas = 1
+        self._proximo_id_tanque_de_agua = 1
 
-    def construir_tanques_de_gas(estado_de_simulacion):
+    def construir_tanques_de_agua(estado_de_simulacion):
 
         '''elegis modelo con mayor ratio capacidad / costo
-        estimas cantidad maxima de gas que vas a necesitar
+        estimas cantidad maxima de agua que vas a necesitar
         (volumen del primer dia pero con composicion critica)
         construis hasta la mitad de esa cantidad'''
 
@@ -33,9 +33,9 @@ class CriterioDeAhorroDeTanquesDeGas(CriterioConstruccionTanquesDeGas):
             potencial_teorico += potencial_primer_dia(parcela, len(parcelas), alfa1, alfa2)
 
         potencial_teorico = math.ceil(potencial_teorico/2)
-        volumen_gas_teorico = estado_de_simulacion.configuracion.composicion_critica.porcentaje_gas * potencial_teorico
-        modelos_necesarios = math.ceil(volumen_gas_teorico/modelo_mas_rendidor.capacidad)
+        volumen_agua_teorico = estado_de_simulacion.configuracion.composicion_critica.porcentaje_agua * potencial_teorico
+        modelos_necesarios = math.ceil(volumen_agua_teorico/modelo_mas_rendidor.capacidad)
 
         for i in range(modelos_necesarios):
-            estado_de_simulacion.construir_tanque_de_gas(modelo_mas_rendidor, _proximo_id_tanque_de_gas)
-            _proximo_id_tanque_de_gas += 1
+            estado_de_simulacion.construir_tanque_de_agua(modelo_mas_rendidor, _proximo_id_tanque_de_agua)
+            _proximo_id_tanque_de_agua += 1

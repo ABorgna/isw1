@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 class CriterioDeCorte(metaclass=ABCMeta):
 
@@ -7,7 +7,7 @@ class CriterioDeCorte(metaclass=ABCMeta):
         pass
 
 
-class CortePorDiaFijo(CriterioEleccionParcelas):
+class CortePorDiaFijo(CriterioDeCorte):
     def __init__(self, dia_de_corte):
         self._dia_de_corte = dia_de_corte
 

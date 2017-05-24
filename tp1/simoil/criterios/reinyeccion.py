@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 
 class CriterioDeReinyeccion(metaclass=ABCMeta):
 
@@ -11,7 +11,7 @@ class CriterioDeReinyeccion(metaclass=ABCMeta):
         pass
 
 
-class CriterioReinyeccionSoloAguaEnTanques(CriterioEleccionParcelas):
+class CriterioReinyeccionSoloAguaEnTanques(CriterioDeReinyeccion):
     def __init__(self, presion):
         self.presion_critica = presion
 
