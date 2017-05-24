@@ -1,9 +1,14 @@
-class CriterioContratacionYUsoDeRigs(object):
-    def contratar_rigs(self, estado_de_simulacion):
-        raise('Not implemented')
+from abc import ABCMeta
 
+class CriterioContratacionYUsoDeRigs(metaclass=ABCMeta):
+
+    @abstractmethod
+    def contratar_rigs(self, estado_de_simulacion):
+        pass
+
+    @abstractmethod
     def excavar(self, estado_de_simulacion):
-        raise('Not implemented')
+        pass
 
 
 class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs):

@@ -1,6 +1,10 @@
-class CriterioHabilitacionPozos(object):
+from abc import ABCMeta
+
+class CriterioHabilitacionPozos(metaclass=ABCMeta):
+
+    @abstractmethod
     def extraer(self, estado_de_simulacion):
-        raise('Not implemented')
+        pass
 
     def potencial(self, pozo, cantidad_habilitada, estado_de_simulacion):
         a1 = estado_de_simulacion.configuracion.alfa1

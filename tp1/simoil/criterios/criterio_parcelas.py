@@ -1,6 +1,10 @@
-class CriterioEleccionParcelas(object):
+from abc import ABCMeta
+
+class CriterioEleccionParcelas(metaclass=ABCMeta):
+
+    @abstractmethod
     def decidir_proximas_parcelas(self, estado_de_simulacion):
-        raise('Not implemented')
+        pass
 
 
 class EleccionParcelasMayorPresion(CriterioEleccionParcelas):

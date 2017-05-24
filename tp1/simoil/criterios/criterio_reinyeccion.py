@@ -1,9 +1,15 @@
-class CriterioDeReinyeccion(object):
-    def decidir_venta_de_gas(estado_de_simulacion):
-        raise('Not implemented')
+from abc import ABCMeta
 
+class CriterioDeReinyeccion(metaclass=ABCMeta):
+
+    @abstractmethod
+    def decidir_venta_de_gas(estado_de_simulacion):
+        pass
+
+    @abstractmethod
     def decidir_reinyeccion(estado_de_simulacion):
-        raise('Not implemented')
+        pass
+
 
 class CriterioReinyeccionSoloAguaEnTanques(CriterioEleccionParcelas):
     def __init__(self, presion):

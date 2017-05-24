@@ -1,6 +1,10 @@
-class CriterioConstruccionTanquesDeAgua(object):
+from abc import ABCMeta
+
+class CriterioConstruccionTanquesDeAgua(metaclass=ABCMeta):
+
+    @abstractmethod
     def construir_tanques_de_agua(estado_de_simulacion):
-        raise("Not implemented")
+        pass
 
 class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
     def _init_(self):

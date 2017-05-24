@@ -1,6 +1,10 @@
-class CriterioDeConstruccionDePlantasSeparadoras(object):
+from abc import ABCMeta
+
+class CriterioDeConstruccionDePlantasSeparadoras(metaclass=ABCMeta):
+
+    @abstractmethod
     def construir_plantas(estado_de_simulacion):
-        raise("Not implemented")
+        pass
 
 class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
     def __init__(self):
