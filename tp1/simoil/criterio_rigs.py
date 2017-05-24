@@ -19,8 +19,8 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
         '''
         if excavaciones == {}:
             return
-        rig_models = estado_de_simulacion.configuracion.modelos_de_rig
         '''
+        rig_models = estado_de_simulacion.configuracion.modelos_de_rig
 
         '''agarras el modelo de rig con mas velocidad
         contratas un rig por parcela
