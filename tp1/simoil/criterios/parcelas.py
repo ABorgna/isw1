@@ -16,7 +16,7 @@ class EleccionParcelasMayorPresion(CriterioEleccionParcelas):
         if n_parcelas_seleccionadas == n_parcelas:
             return
         parcelas_seleccionadas = sorted(estado_de_simulacion.yacimiento.parcelas(),
-                                        key=lambda parcela: parcela.presion, reverse=True)[-n_parcelas:]
+                                        key=lambda parcela: parcela.presion, reverse=True)[:n_parcelas]
         n_parcelas_seleccionadas = len(parcelas_seleccionadas)
 
         for parcela in parcelas_seleccionadas:
