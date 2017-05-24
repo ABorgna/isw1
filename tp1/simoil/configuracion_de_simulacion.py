@@ -4,6 +4,8 @@ class ConfiguracionDeSimulacion(object):
         self.modelos_de_rig = []
         self.modelos_de_planta_separadora = []
 
+        self.composicion_critica = pass
+
         self.criterio_reinyeccion = pass
         self.criterio_parcelas = pass
         self.criterio_de_rigs = pass
