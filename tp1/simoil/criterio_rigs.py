@@ -32,13 +32,15 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
         for excavacion in excavaciones:
             dias_necesarios = math.ceil(excavacion.parcela_perforada.profundidad/velocidad_del_modelo)
             estado_de_simulacion.alquilar_rig(modelo_mas_rapido, dias_necesarios, _proximo_id_rig)
+            # buscar el rig alquilado, se agrega al final de la lista por lo tanto es el último
+            rig_alquilado = estado_de_simulacion.rigs_contratados[-1]
             for dia in range(1, dias_necesarios+1):
-                plan[dia].append((excavacion, pass))
+                plan[dia].append((excavacion, rig_alquilado))
 
 
     def excavar(self, estado_de_simulacion):
         dia = estado_de_simulacion.dia()
-        pozos = estado_de_simulacion.yacimiento.pozos_perforados()
+        pozos = estado_de_simulacion.yacimiento.pozos_perforados
         if dia in self.plan:
             plan_dia = plan[dia]
             for excavacion, rig in plan_dia:
