@@ -19,7 +19,7 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
 
     def contratar_rigs(self, estado_de_simulacion):
         excavaciones = estado_de_simulacion.excavaciones_actuales
-        if estado_de_simulacion.dia_actual != 0:
+        if estado_de_simulacion.dia_actual != 1:
             return
         '''
         if excavaciones == {}:

@@ -1,10 +1,21 @@
 class EstadoDeSimulacion(object):
     def __init__(self, yacimiento, configuracion):
-        self.excavaciones_actuales = {}
+        self.dia_actual = 1
+
         self.rigs_contratados = []
         self.plantas_separadoras = []
+        self.tanques_de_agua = []
+        self.tanques_de_gas = []
+
+        self.excavaciones_actuales = []
+
+        self.plantas_en_construccion = {}
+        self.tanques_de_agua_en_construccion = {}
+        self.tanques_de_gas_en_construccion = {}
+
         self.configuracion = configuracion
         self.yacimiento = yacimiento
+
 
     def avanzar_dia():
         self.configuracion.criterio_reinyeccion.decidir_venta_de_gas(self)
