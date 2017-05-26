@@ -1,14 +1,16 @@
 from abc import ABCMeta, abstractmethod
 import math
 
+from yacimiento import Pozo
+
 class CriterioContratacionYUsoDeRigs(metaclass=ABCMeta):
 
     @abstractmethod
-    def contratar_rigs(self, estado_de_simulacion):
+    def contratar_rigs(self, estado):
         pass
 
     @abstractmethod
-    def excavar(self, estado_de_simulacion):
+    def excavar(self, estado):
         pass
 
 
@@ -18,16 +20,16 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
         self._proximo_id_pozo = 1
         self._proximo_id_rig = 1
 
-    def contratar_rigs(self, estado_de_simulacion):
-        excavaciones = estado_de_simulacion.excavacionesActuales
-        if estado_de_simulacion.diaNumero != 1:
+    def contratar_rigs(self, estado):
+        excavaciones = estado.excavacionesActuales
+        if estado.diaNumero != 1:
             return
 
         '''
         if excavaciones == {}:
             return
         '''
-        rig_models = estado_de_simulacion.configuracion.tiposDeRig
+        rig_models = estado.configuracion.tiposDeRig
 
         '''agarras el modelo de rig con mas velocidad
         contratas un rig por parcela
@@ -41,29 +43,31 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
         for excavacion in excavaciones:
             resistencia = excavacion.parcelaPerforada.resistenciaAExcavacion
             coeficiente = (100 - resistencia)/100
+
             dias_necesarios = math.ceil(excavacion.parcelaPerforada.profundidad \
                     / (velocidad_del_modelo * coeficiente))
-            estado_de_simulacion.alquilarRIG(modelo_mas_rapido, dias_necesarios,
-                    self._proximo_id_rig)
+            dias_necesarios = max(dias_necesarios,
+                                  modelo_mas_rapido.diasDeAlquilerMinimo)
 
-            # buscar el rig alquilado, se agrega al final de la lista
-            # por lo tanto es el último
-            rig_alquilado = estado_de_simulacion.rigsDisponibles[-1]
+            rig_alquilado = estado.alquilarRIG(
+                    modelo_mas_rapido, dias_necesarios, self._proximo_id_rig)
+
             for dia in range(1, dias_necesarios+1):
-                self.plan[dia].append((excavacion, rig_alquilado))
+                self.plan.setdefault(dia, []).append((excavacion, rig_alquilado))
 
 
-    def excavar(self, estado_de_simulacion):
-        dia = estado_de_simulacion.diaNumero()
-        pozos = estado_de_simulacion.yacimiento.pozosPerforados
+    def excavar(self, estado):
+        dia = estado.diaNumero
+        pozos = estado.yacimiento.pozosPerforados
 
         if dia in self.plan:
             plan_dia = self.plan[dia]
 
             for excavacion, rig in plan_dia:
                 excavacion.excavar(rig)
-                if excavacion.finalizada():
-                    nuevo_pozo = Pozo(excavacion.parcelaPerforada,
+                if excavacion.termino():
+                    nuevo_pozo = Pozo(
+                            excavacion.parcelaPerforada.presionInicial,
                             self._proximo_id_pozo)
                     self._proximo_id_pozo += 1
                     pozos.append(nuevo_pozo)

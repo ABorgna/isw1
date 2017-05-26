@@ -5,7 +5,7 @@ class ModeloDeTanque():
             costoDeConstruccion):
         self.volumenDeAlmacenamiento = volumenDeAlmacenamiento
         self.diasDeConstruccion = diasDeConstruccion
-        self.diasDeConstruccion = costoDeConstruccion
+        self.costoDeConstruccion = costoDeConstruccion
 
 class ModeloDePlantaSeparadora():
 
@@ -13,7 +13,7 @@ class ModeloDePlantaSeparadora():
             costoDeConstruccion):
         self.volumenDiarioSeparable = volumenDiarioSeparable
         self.diasDeConstruccion = diasDeConstruccion
-        self.diasDeConstruccion = costoDeConstruccion
+        self.costoDeConstruccion = costoDeConstruccion
 
 class ModeloDeRIG():
 

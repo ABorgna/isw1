@@ -5,19 +5,19 @@ class Composicion:
         self._partes_agua = partes_agua
         self._partes_petroleo = partes_petroleo
 
-    @attribute
+    @property
     def ratioDeGas(self):
         return self._partes_gas / self._total
 
-    @attribute
+    @property
     def ratioDeAgua(self):
         return self._partes_agua / self._total
 
-    @attribute
+    @property
     def ratioDePetroleo(self):
         return self._partes_petroleo / self._total
 
-    @attribute
+    @property
     def _total(self):
         return self._partes_gas + self._partes_agua + self._partes_petroleo
 

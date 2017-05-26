@@ -66,7 +66,7 @@ class ParserDeYacimientos:
 
         volInicial = config.getfloat("yacimiento", "volumenInicial")
 
-        composicion = config.["yacimiento"]["composicion"].split()
+        composicion = config["yacimiento"]["composicion"].split()
         if len(composicion) != 3:
             raise ValueError("La composicion debe ser [Gas Agua Petroleo]")
         composicion = Composicion(*map(float, composicion))

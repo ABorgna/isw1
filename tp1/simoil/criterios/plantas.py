@@ -4,14 +4,14 @@ import math
 class CriterioDeConstruccionDePlantasSeparadoras(metaclass=ABCMeta):
 
     @abstractmethod
-    def construir_plantas(self, estado_de_simulacion):
+    def construir_plantas(self, estado):
         pass
 
 class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
     def __init__(self):
         self._proximo_id_planta = 1
 
-    def construir_plantas(self, estado_de_simulacion):
+    def construir_plantas(self, estado):
 
 
         '''- con funcion smart ahorro
@@ -19,14 +19,14 @@ class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
         te fijas cuanto necesitas procesar al primer dia si extraes al maximo
         construis hasta la mitad de esa necesidad'''
 
-        if estado_de_simulacion.dia_actual == 1:
-            configuracion = estado_de_simulacion.configuracion
+        if estado.diaNumero == 1:
+            configuracion = estado.configuracion
             modelos = configuracion.tiposDePlantaSeparadora
             modelo_mas_rendidor = max(modelos, key=lambda modelo:
-                    modelo.volumenDiarioSeparable /modelo.costoDeConstruccion)
+                    modelo.volumenDiarioSeparable / modelo.costoDeConstruccion)
 
             potencial_teorico = 0
-            excavaciones = estado_de_simulacion.excavacionesActuales
+            excavaciones = estado.excavacionesActuales
             alfa1 = configuracion.alfa1
             alfa2 = configuracion.alfa2
 
@@ -43,15 +43,17 @@ class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
                     modelo_mas_rendidor.volumenDiarioSeparable)
 
             for i in range(modelos_necesarios):
-                estado_de_simulacion.construirPlantaSeparadora(
+                estado.construirPlantaSeparadora(
                         modelo_mas_rendidor, self._proximo_id_planta)
                 self._proximo_id_planta += 1
 
-        plantas_sin_terminar = estado_de_simulacion.plantasEnConstruccion
+        plantas_sin_terminar = estado.plantasEnConstruccion
 
-        for planta in plantas_sin_terminar:
+        for planta in plantas_sin_terminar.keys():
             plantas_sin_terminar[planta] -= 1
-
             if plantas_sin_terminar[planta] == 0:
-                estado_de_simulacion.plantas_separadoras.append(planta)
-                del plantas_separadoras[planta]
+                estado.plantasDisponibles.append(planta)
+
+        estado.plantasEnConstruccion = \
+            {k:v for k,v in plantas_sin_terminar.items() if v > 0}
+

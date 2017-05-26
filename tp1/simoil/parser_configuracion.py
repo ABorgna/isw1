@@ -5,7 +5,7 @@ import sys
 
 import criterios
 from configuracion_de_simulacion import ConfiguracionDeSimulacion
-from modelos import *
+from assets.modelos import *
 
 class ParserDeConfiguracionDeSimulacion:
     def __init__(self):
