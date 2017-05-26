@@ -1,3 +1,7 @@
+from assets.planta import PlantaSeparadora
+from assets.rig import Rig
+from assets.tanque import Tanque
+
 class EstadoDeSimulacion(object):
     def __init__(self, yacimiento, configuracion):
         self.yacimiento = yacimiento
@@ -42,32 +46,82 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
 
         # TODO: extraer el petroleo si no se reinyectó,
+        # checkear si terminaron las construcciones,
         # y simular todo lo que falte
 
     def puedeSeguir(self):
-        return not self.configuracion.CriterioDeCorte.cortar(self)
+        cortePorCriterio = self.configuracion.CriterioDeCorte.cortar(self)
+
+        bajaConcentracion = self.yacimiento.composicion.ratioDePetroleo <= \
+                            self.configuracion.concentracionCritica
+
+        return not cortePorCriterio and not bajaConcentracion
 
     def alquilarRIG(self, modeloDeRIG, diasDeAlquiler, id):
-        raise NotImplementedError
+        assert(diasDeAlquiler >= modeloDeRIG.diasDeAlquilerMinimo)
+
+        rig = Rig(modelo, id)
+
+        self.rigsAlquiladosActualmente[rig] = diasDeAlquiler
+        self.costosAcumulados += modeloDeRIG.costoDeAlquilerPorDia * diasDeAlquiler
 
     def construirPlantaSeparadora(self, modeloPlanta, id):
-        raise NotImplementedError
+        planta = PlantaSeparadora(modeloPlanta, id)
+
+        self.plantasEnConstruccion[planta] = modeloPlanta.diasDeConstruccion
+        self.costosAcumulados += modeloPlanta.costoDeConstruccion
 
     def construirTanqueDeAgua(self, modeloTanque, id):
-        raise NotImplementedError
+        tanque = Tanque(modeloTanque, id)
+
+        self.tanquesDeAguaEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
+        self.costosAcumulados += modeloTanque.costoDeConstruccion
 
     def construirTanqueDeGas(self, modeloTanque, id):
-        raise NotImplementedError
+        tanque = Tanque(modeloTanque, id)
+
+        self.tanquesDeGasEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
+        self.costosAcumulados += modeloTanque.costoDeConstruccion
 
     def agregarExcavacion(self, excavacion):
-        raise NotImplementedError
+        self.excavacionesActuales.append(excavacion)
 
     def comprarAgua(self, volumen):
-        raise NotImplementedError
+        self.costosAcumulados += volumen * self.configuracion.costoLitroAgua
+
+        for t in self.tanquesDeAguaDisponibles:
+            dVol = min(volumen, t.capacidad - t.volumenAlmacenado)
+            t.almacenarVolumen(dVol)
+            volumen -= dVol
+
+            if volumen == 0:
+                break
+
+        assert(volumen == 0)
 
     def venderPetroleo(self, volumen):
-        raise NotImplementedError
+        self.gananciasAcumuladas += \
+            volumen * self.configuracion.precioMetroCubicoDePetroleo
 
     def venderGas(self, volumen):
-        raise NotImplementedError
+        self.gananciasAcumuladas += \
+            volumen * self.configuracion.precioMetroCubicoDeGas
+
+        for t in self.tanquesDeGasDisponibles:
+            dVol = min(volumen, t.volumenAlmacenado)
+            t.retirarVolumen(dVol)
+            volumen -= dVol
+
+            if volumen == 0:
+                break
+
+        assert(volumen == 0)
+
+    # Internals
+
+    def _volumenMaximo(self, tanques):
+        return sum(t.capacidad for t in tanques)
+
+    def _volumenAlmacenado(self, tanques):
+        return sum(t.volumenAlmacenado for t in tanques)
 
