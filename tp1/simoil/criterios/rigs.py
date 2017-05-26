@@ -35,7 +35,8 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
         modelo_mas_rapido = max(rig_models, key=lambda modelo: modelo.metros_por_dia)
         velocidad_del_modelo = modelo_mas_rapido.metros_por_dia
         for excavacion in excavaciones:
-            dias_necesarios = math.ceil(excavacion.parcela_perforada.profundidad/velocidad_del_modelo)
+            coeficiente =                                                            (100 - excavacion.parcela_perforada.resistencia_a_excavacion)/100
+            dias_necesarios = math.ceil(excavacion.parcela_perforada.profundidad/velocidad_del_modelo * coeficiente)
             estado_de_simulacion.alquilar_rig(modelo_mas_rapido, dias_necesarios, _proximo_id_rig)
             # buscar el rig alquilado, se agrega al final de la lista por lo tanto es el último
             rig_alquilado = estado_de_simulacion.rigs_contratados[-1]
