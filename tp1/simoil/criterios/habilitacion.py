@@ -29,7 +29,7 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
 
         capacidad_total_de_agua = 0
         for tanque in estado.tanquesDeAguaDisponibles:
-            capacidad_total += tanque.capacidad
+            capacidad_total_de_agua += tanque.capacidad
 
         ratio_agua = composicion.ratioDeAgua
         for pozo in pozos:
@@ -65,6 +65,7 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
         for tanque in estado.tanquesDeGasDisponibles:
             a_almacenar_en_tanque = min(tanque.capacidad, vol_gas_a_almacenar)
             tanque.almacenarVolumen(a_almacenar_en_tanque)
+            logging.info('Se almacenaron %f m3 en el tanque de gas %d' % (a_almacenar_en_tanque, tanque.id))
             vol_gas_a_almacenar -= a_almacenar_en_tanque
             if vol_gas_a_almacenar < 0: break
 
@@ -73,6 +74,7 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
         for tanque in estado.tanquesDeAguaDisponibles:
             a_almacenar_en_tanque = min(tanque.capacidad, vol_agua_a_almacenar)
             tanque.almacenarVolumen(a_almacenar_en_tanque)
+            logging.info('Se almacenaron %f m3 en el tanque de agua %d' % (a_almacenar_en_tanque, tanque.id))
             vol_agua_a_almacenar -= a_almacenar_en_tanque
             if vol_agua_a_almacenar < 0: break
 
