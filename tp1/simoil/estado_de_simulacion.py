@@ -16,8 +16,7 @@ class EstadoDeSimulacion(object):
         self.configuracion = configuracion
         self.yacimiento = yacimiento
 
-
-    def avanzar_dia():
+    def avanzar_dia(self):
         self.configuracion.criterio_reinyeccion.decidir_venta_de_gas(self)
 
         self.configuracion.criterio_parcelas.decidir_proximas_parcelas(self)

@@ -6,10 +6,14 @@ import logging
 import sys
 
 import criterios
+from estado_de_simulacion import EstadoDeSimulacion
 from parser_configuracion import ParserDeConfiguracionDeSimulacion
 
-def simular(estado_de_simulacion):
-    pass
+def simular(yacimiento, config):
+    estado = EstadoDeSimulacion(yacimiento, config)
+
+    while not estado.terminar():
+        estado.avanzar_dia()
 
 if __name__ == "__main__":
 
@@ -32,8 +36,8 @@ if __name__ == "__main__":
 
     if config is None:
         # :(
+        print("Invalid configuration file, exiting", file=sys.stderr)
         sys.exit(1)
 
-    critCorte = config.CriterioDeCorte
-    print(critCorte)
+    simular(config)
 
