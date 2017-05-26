@@ -1,37 +1,43 @@
 class ConfiguracionDeSimulacion(object):
 
-    CRITERIOS = [
-        "CriterioDeCorte",
-        "CriterioHabilitacionPozos",
-        "CriterioEleccionParcelas",
-        "CriterioDeReinyeccion",
-        "CriterioDeConstruccionDePlantasSeparadoras",
-        "CriterioContratacionYUsoDeRigs",
-        "CriterioConstruccionTanquesDeAgua",
-        "CriterioConstruccionTanquesDeGas",
-    ]
+    def __init__(self, *,
+            CriterioDeCorte,
+            CriterioHabilitacionPozos,
+            CriterioEleccionParcelas,
+            CriterioDeReinyeccion,
+            CriterioDeConstruccionDePlantasSeparadoras,
+            CriterioContratacionYUsoDeRigs,
+            CriterioConstruccionTanquesDeAgua,
+            CriterioConstruccionTanquesDeGas,
+            alfa1,
+            alfa2,
+            maximoVolumenReinyectable,
+            costoLitroAgua,
+            precioMetroCubicoDePetroleo,
+            precioMetroCubicoDeGas,
+            composicionCritica,
+            tiposDeRig,
+            tiposDePlantaSeparadora,
+            tiposDeTanqueDeAgua,
+            tiposDeTanqueDeGas):
 
-    PARAMS = [
-        "alfa1",
-        "alfa2",
-        "maximoVolumenReinyectable",
-        "costoLitroAgua",
-        "precioMetroCubicoDePetroleo",
-        "precioMetroCubicoDeGas",
-        "composicionCritica",
-        "composicionCritica",
-    ]
-
-    OBJ_LISTS = [
-        "tiposDeRig",
-        "tiposDePlantaSeparadora",
-        "tiposDeTanqueDeAgua",
-        "tiposDeTanqueDeGas",
-    ]
-
-    def __init__(self, **kwargs):
-        for key in self.CRITERIOS + self.PARAMS + self.OBJ_LISTS:
-            setattr(self, key, kwargs.get(key))
-            if kwargs.get(key) is None:
-                raise ValueError("Invalid " + key)
-
+        self.CriterioDeCorte = CriterioDeCorte
+        self.CriterioHabilitacionPozos = CriterioHabilitacionPozos
+        self.CriterioEleccionParcelas = CriterioEleccionParcelas
+        self.CriterioDeReinyeccion = CriterioDeReinyeccion
+        self.CriterioDeConstruccionDePlantasSeparadoras = \
+                CriterioDeConstruccionDePlantasSeparadoras
+        self.CriterioContratacionYUsoDeRigs = CriterioContratacionYUsoDeRigs
+        self.CriterioConstruccionTanquesDeAgua = CriterioConstruccionTanquesDeAgua
+        self.CriterioConstruccionTanquesDeGas = CriterioConstruccionTanquesDeGas
+        self.alfa1 = alfa1
+        self.alfa2 = alfa2
+        self.maximoVolumenReinyectable = maximoVolumenReinyectable
+        self.costoLitroAgua = costoLitroAgua
+        self.precioMetroCubicoDePetroleo = precioMetroCubicoDePetroleo
+        self.precioMetroCubicoDeGas = precioMetroCubicoDeGas
+        self.composicionCritica = composicionCritica
+        self.tiposDeRig = tiposDeRig
+        self.tiposDePlantaSeparadora = tiposDePlantaSeparadora
+        self.tiposDeTanqueDeAgua = tiposDeTanqueDeAgua
+        self.tiposDeTanqueDeGas = tiposDeTanqueDeGas

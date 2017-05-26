@@ -1,12 +1,13 @@
 class Excavacion(object):
-    def __init__(parcela):
-        self.mts_restantes = parcela.profundidad
-        self.parcela_perforada = parcela
+    def __init__(self, parcela):
+        self.parcelaPerforada = parcela
+        self.metrosRestantes = parcela.profundidad
 
     def excavar(self, rig):
-        coeficiente = (100 - parcela_perforada.resistencia_a_excavacion)/100
-        mts_excavados = min(mts_restantes, rig.metros_por_dia*coeficiente)
-        mts_restantes -= mts_excavados
+        coeficiente = (100 - self.parcelaPerforada.resistencia_a_excavacion)/100
+        mts_excavados = min(self.metrosRestantes,
+                rig.metrosDiariosExcavados*coeficiente)
+        self.metrosRestantes -= mts_excavados
 
-    def finalizada(self):
+    def termino(self):
         return mts_restantes == 0
