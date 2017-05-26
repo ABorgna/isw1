@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 import logging
+import math as m
 
 class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
@@ -37,6 +38,8 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
             agua_extraida = extraccion*ratio_agua
 
             if agua_extraida <= capacidad_total_de_agua:
+                yacimiento.volumenExtraido += extraccion
+                yacimiento.volumenActual -= extraccion
                 capacidad_total_de_agua -= agua_extraida
                 extraccion_total += extraccion
                 self.logExtraccion(pozo, extraccion)
@@ -60,22 +63,23 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
 
         estado.venderPetroleo(vol_petroleo_total)
 
-        vol_gas_a_almacenar = vol_gas_total
+        def almacenarEn(tanques, vol_a_almacenar, string_tipo):
+            for tanque in tanques:
+                a_almacenar_en_tanque = min(tanque.capacidad, vol_a_almacenar)
+                tanque.almacenarVolumen(a_almacenar_en_tanque)
+                logging.info('Se almacenaron %f m3 en el tanque de %s %d' % (a_almacenar_en_tanque, string_tipo, tanque.id))
+                vol_a_almacenar -= a_almacenar_en_tanque
+                if vol_a_almacenar < 0: break
 
-        for tanque in estado.tanquesDeGasDisponibles:
-            a_almacenar_en_tanque = min(tanque.capacidad, vol_gas_a_almacenar)
-            tanque.almacenarVolumen(a_almacenar_en_tanque)
-            logging.info('Se almacenaron %f m3 en el tanque de gas %d' % (a_almacenar_en_tanque, tanque.id))
-            vol_gas_a_almacenar -= a_almacenar_en_tanque
-            if vol_gas_a_almacenar < 0: break
+        almacenarEn(estado.tanquesDeGasDisponibles, vol_gas_total, "gas")
+        almacenarEn(estado.tanquesDeAguaDisponibles, vol_agua_total, "agua")
 
-        vol_agua_a_almacenar = vol_agua_total
+        volumen_inicial = yacimiento.volumenInicial
+        volumen_actual = yacimiento.volumenExtraido
 
-        for tanque in estado.tanquesDeAguaDisponibles:
-            a_almacenar_en_tanque = min(tanque.capacidad, vol_agua_a_almacenar)
-            tanque.almacenarVolumen(a_almacenar_en_tanque)
-            logging.info('Se almacenaron %f m3 en el tanque de agua %d' % (a_almacenar_en_tanque, tanque.id))
-            vol_agua_a_almacenar -= a_almacenar_en_tanque
-            if vol_agua_a_almacenar < 0: break
+        def proximaPresion(pozo, volumen_inicial, volumen_actual, n_pozos):
+            beta = 0.1*(volumen_actual/volumen_inicial)/(n_pozos**(3/2))
+            return pozo.presionActual*(m.e**-beta)
 
-        # TODO actualizar presiones
+        for pozo in pozos:
+            pozo.actualizarPresion(proximaPresion(pozo, volumen_inicial, volumen_actual, n_pozos_habilitados))
