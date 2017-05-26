@@ -16,6 +16,11 @@ def simular(yacimiento, config):
     while estado.puedeSeguir():
         estado.avanzarDia()
 
+    logging.info("Simulacion finalizada")
+    logging.info("--------------------------------")
+    logging.info("Costo bruto: " + str(estado.costosAcumulados))
+    logging.info("Ganancia bruta: " + str(estado.gananciasAcumuladas))
+
 if __name__ == "__main__":
 
     # Parse any arguments
@@ -32,7 +37,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Init the logger
-    logging.basicConfig(stream=args.outfile, level=logging.INFO)
+    fmt = "%(message)s"
+    logging.basicConfig(stream=args.outfile, level=logging.INFO, format=fmt)
 
     configParser = ParserDeConfiguracionDeSimulacion()
     config = configParser.parsear_archivo(args.configfile)

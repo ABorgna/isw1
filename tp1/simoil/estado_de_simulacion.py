@@ -1,3 +1,5 @@
+import logging
+
 from assets.planta import PlantaSeparadora
 from assets.rig import Rig
 from assets.tanque import Tanque
@@ -7,7 +9,7 @@ class EstadoDeSimulacion(object):
         self.yacimiento = yacimiento
         self.configuracion = configuracion
 
-        self.diaNumero = 1
+        self.diaNumero = 0
         self.costosAcumulados = 0
         self.gananciasAcumuladas = 0
 
@@ -23,6 +25,9 @@ class EstadoDeSimulacion(object):
         self.tanquesDeGasEnConstruccion = {}
 
     def avanzarDia(self):
+        self.diaNumero += 1
+        logging.info("---- dia número: "+ str(self.diaNumero))
+
         self.configuracion.CriterioDeReinyeccion.decidir_venta_de_gas(self)
 
         self.configuracion.CriterioEleccionParcelas.decidir_proximas_parcelas(self)
