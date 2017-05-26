@@ -17,7 +17,7 @@ class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
         (volumen del primer dia pero con composicion critica)
         construis hasta la mitad de esa cantidad'''
 
-        if estado_de_simulacion.dia_actual == 1
+        if estado_de_simulacion.dia_actual == 1:
             modelos = estado_de_simulacion.configuracion.modelos_de_tanque
             modelo_mas_rendidor = max(modelos, key=lambda modelo: modelo.capacidad/modelo.costo)
 
