@@ -29,7 +29,7 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
 
         capacidad_total_de_agua = 0
         for tanque in estado.tanquesDeAguaDisponibles:
-            capacidad_total = tanque.capacidad
+            capacidad_total += tanque.capacidad
 
         ratio_agua = composicion.ratioDeAgua
         for pozo in pozos:
