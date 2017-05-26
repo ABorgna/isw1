@@ -38,8 +38,8 @@ class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
 
             potencial_teorico = math.ceil(potencial_teorico/2)
 
-            volumen_agua_teorico = estado_de_simulacion.configuracion.\
-                    composicionCritica.porcentajeDeAgua * potencial_teorico/100
+            volumen_agua_teorico = (1 - estado_de_simulacion.configuracion.\
+                    concentracionCritica) * potencial_teorico
             modelos_necesarios = math.ceil(
                     volumen_agua_teorico/modelo_mas_rendidor.volumenDeAlmacenamiento)
 

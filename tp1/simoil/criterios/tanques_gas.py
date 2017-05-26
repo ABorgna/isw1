@@ -37,8 +37,8 @@ class CriterioDeAhorroDeTanquesDeGas(CriterioConstruccionTanquesDeGas):
 
             potencial_teorico = math.ceil(potencial_teorico/2)
 
-            volumen_gas_teorico = estado_de_simulacion.configuracion.\
-                    composicionCritica.porcentajeDeGas * potencial_teorico/100
+            volumen_gas_teorico = (1 - estado_de_simulacion.configuracion.\
+                    concentracionCritica) * potencial_teorico
 
             modelos_necesarios = math.ceil(
                     volumen_gas_teorico/modelo_mas_rendidor.volumenDeAlmacenamiento)
