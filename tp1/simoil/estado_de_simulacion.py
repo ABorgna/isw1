@@ -11,7 +11,6 @@ class EstadoDeSimulacion(object):
         self.costosAcumulados = 0
         self.gananciasAcumuladas = 0
 
-        self.rigsDisponibles = []
         self.plantasDisponibles = []
         self.tanquesDeAguaDisponibles = []
         self.tanquesDeGasDisponibles = []
@@ -57,13 +56,15 @@ class EstadoDeSimulacion(object):
 
         return not cortePorCriterio and not bajaConcentracion
 
-    def alquilarRIG(self, modeloDeRIG, diasDeAlquiler, id):
-        assert(diasDeAlquiler >= modeloDeRIG.diasDeAlquilerMinimo)
+    def alquilarRIG(self, modelo, diasDeAlquiler, id):
+        assert(diasDeAlquiler >= modelo.diasDeAlquilerMinimo)
 
         rig = Rig(modelo, id)
 
         self.rigsAlquiladosActualmente[rig] = diasDeAlquiler
-        self.costosAcumulados += modeloDeRIG.costoDeAlquilerPorDia * diasDeAlquiler
+        self.costosAcumulados += modelo.costoDeAlquilerPorDia * diasDeAlquiler
+
+        return rig
 
     def construirPlantaSeparadora(self, modeloPlanta, id):
         planta = PlantaSeparadora(modeloPlanta, id)
@@ -71,17 +72,23 @@ class EstadoDeSimulacion(object):
         self.plantasEnConstruccion[planta] = modeloPlanta.diasDeConstruccion
         self.costosAcumulados += modeloPlanta.costoDeConstruccion
 
+        return planta
+
     def construirTanqueDeAgua(self, modeloTanque, id):
         tanque = Tanque(modeloTanque, id)
 
         self.tanquesDeAguaEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
 
+        return tanque
+
     def construirTanqueDeGas(self, modeloTanque, id):
         tanque = Tanque(modeloTanque, id)
 
         self.tanquesDeGasEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
+
+        return tanque
 
     def agregarExcavacion(self, excavacion):
         self.excavacionesActuales.append(excavacion)

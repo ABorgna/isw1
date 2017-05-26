@@ -4,13 +4,13 @@ import logging
 class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
     @abstractmethod
-    def extraer(self, estado_de_simulacion):
+    def extraer(self, estado):
         pass
 
-    def potencial(self, pozo, cantidad_habilitada, estado_de_simulacion):
-        a1 = estado_de_simulacion.configuracion.alfa1
-        a2 = estado_de_simulacion.configuracion.alfa2
-        p = pozo.presion_actual
+    def potencial(self, pozo, cantidad_habilitada, estado):
+        a1 = estado.configuracion.alfa1
+        a2 = estado.configuracion.alfa2
+        p = pozo.presionActual
         ratio = p / cantidad_habilitada
         return a1 * ratio + a2 * (ratio ** 2)
 
@@ -19,25 +19,25 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
 
 class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
-    def extraer(self, estado_de_simulacion):
-        pozos = estado_de_simulacion.yacimiento.pozosPerforados
+    def extraer(self, estado):
+        pozos = estado.yacimiento.pozosPerforados
         extraccion_total = 0
         n_pozos_habilitados = len(pozos)
 
         for pozo in pozos:
-            extraccion = self.potencial(pozo, n_pozos_habilitados, estado_de_simulacion)
+            extraccion = self.potencial(pozo, n_pozos_habilitados, estado)
             extraccion_total += extraccion
             self.logExtraccion(pozo, extraccion)
 
         a_separar = extraccion_total
 
-        composicion = estado_de_simulacion.yacimiento.composicion
+        composicion = estado.yacimiento.composicion
 
         vol_agua_total = 0
         vol_petroleo_total = 0
         vol_gas_total = 0
 
-        for planta in estado_de_simulacion.plantasDisponibles:
+        for planta in estado.plantasDisponibles:
             a_separar_en_planta = min(planta.volumenDiarioSeparable, a_separar)
             vol_agua, vol_petroleo, vol_gas = \
                 planta.separar(a_separar_en_planta, composicion)
@@ -48,21 +48,21 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
 
             if a_separar < 0: break
 
-        estado_de_simulacion.venderPetroleo(vol_petroleo_total)
+        estado.venderPetroleo(vol_petroleo_total)
 
         vol_gas_a_almacenar = vol_gas_total
 
-        for tanque in estado_de_simulacion.tanquesDeGasDisponibles:
-            a_almacenar_en_tanque = min(tanque.capacidad(), vol_gas_a_almacenar)
-            tanque.almacenar(a_almacenar_en_tanque)
+        for tanque in estado.tanquesDeGasDisponibles:
+            a_almacenar_en_tanque = min(tanque.capacidad, vol_gas_a_almacenar)
+            tanque.almacenarVolumen(a_almacenar_en_tanque)
             vol_gas_a_almacenar -= a_almacenar_en_tanque
             if vol_gas_a_almacenar < 0: break
 
         vol_agua_a_almacenar = vol_agua_total
 
-        for tanque in estado_de_simulacion.tanquesDeAguaDisponibles:
-            a_almacenar_en_tanque = min(tanque.capacidad(), vol_agua_a_almacenar)
-            tanque.almacenar(a_almacenar_en_tanque)
+        for tanque in estado.tanquesDeAguaDisponibles:
+            a_almacenar_en_tanque = min(tanque.capacidad, vol_agua_a_almacenar)
+            tanque.almacenarVolumen(a_almacenar_en_tanque)
             vol_agua_a_almacenar -= a_almacenar_en_tanque
             if vol_agua_a_almacenar < 0: break
 
