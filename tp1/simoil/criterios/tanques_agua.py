@@ -18,21 +18,22 @@ class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
         construis hasta la mitad de esa cantidad'''
 
         if estado_de_simulacion.diaNumero == 1:
-            modelos = estado_de_simulacion.configuracion.tiposDeTanqueDeAgua
+            configuracion = estado_de_simulacion.configuracion
+            modelos = configuracion.tiposDeTanqueDeAgua
             modelo_mas_rendidor = max(modelos, key=lambda modelo:
                     modelo.volumenDeAlmacenamiento / modelo.costoDeConstruccion)
 
             potencial_teorico = 0
-            parcelas = estado_de_simulacion.yacimiento.parcelas
-            alfa1 = estado_de_simulacion.configuracion.alfa1
-            alfa2 = estado_de_simulacion.configuracion.alfa2
+            alfa1 = configuracion.alfa1
+            alfa2 = configuracion.alfa2
+            excavaciones = estado_de_simulacion.excavacionesActuales
 
-            def potencial_primer_dia(parcela, cantidad_habilitada, alfa1, alfa2):
-                ratio = presion / cantidad_habilitada
+            def potencial_primer_dia(excavacion, cantidad_habilitada, alfa1, alfa2):
+                ratio = excavacion.parcelaPerforada.presionInicial / cantidad_habilitada
                 return alfa1 * ratio + alfa2 * (ratio ** 2)
 
-            for parcela in parcelas:
-                potencial_teorico += potencial_primer_dia(parcela, len(parcelas),
+            for excavacion in excavaciones:
+                potencial_teorico += potencial_primer_dia(excavacion, len(excavaciones),
                         alfa1, alfa2)
 
             potencial_teorico = math.ceil(potencial_teorico/2)
@@ -55,4 +56,3 @@ class CriterioDeAhorroDeTanquesDeAgua(CriterioConstruccionTanquesDeAgua):
             if tanques_de_agua_sin_terminar[tanque] == 0:
                 tanques_de_agua.append(tanque)
                 del tanques_de_agua_sin_terminar[tanque]
-

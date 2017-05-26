@@ -26,16 +26,16 @@ class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
                     modelo.volumenDiarioSeparable /modelo.costoDeConstruccion)
 
             potencial_teorico = 0
-            parcelas = estado_de_simulacion.yacimiento.parcelasDelYacimiento
+            excavaciones = estado_de_simulacion.excavacionesActuales
             alfa1 = configuracion.alfa1
             alfa2 = configuracion.alfa2
 
-            def potencial_primer_dia(parcela, cantidad_habilitada, alfa1, alfa2):
-                ratio = presion / cantidad_habilitada
+            def potencial_primer_dia(excavacion, cantidad_habilitada, alfa1, alfa2):
+                ratio = excavacion.parcelaPerforada.presionInicial / cantidad_habilitada
                 return alfa1 * ratio + alfa2 * (ratio ** 2)
 
-            for parcela in parcelas:
-                potencial_teorico += potencial_primer_dia(parcela, len(parcelas),
+            for excavacion in excavaciones:
+                potencial_teorico += potencial_primer_dia(excavacion, len(excavaciones),
                         alfa1, alfa2)
 
             potencial_teorico = math.ceil(potencial_teorico/2)
@@ -55,4 +55,3 @@ class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
             if plantas_sin_terminar[planta] == 0:
                 estado_de_simulacion.plantas_separadoras.append(planta)
                 del plantas_separadoras[planta]
-
