@@ -4,6 +4,7 @@ import os
 import sys
 
 from yacimiento import *
+from composicion import Composicion
 
 class ParserDeYacimientos:
     def __init__(self):
@@ -16,7 +17,7 @@ class ParserDeYacimientos:
         # Default values
         config["yacimiento"] = {}
         config["yacimiento"]["volumenInicial"] = "100000"
-        config["yacimiento"]["composicion"] = "0" # TODO: definir composicion
+        config["yacimiento"]["composicion"] = "1 0 9"
 
         config["parcela.0"] = {}
         config["parcela.0"]["id"] = "10"
@@ -65,8 +66,10 @@ class ParserDeYacimientos:
 
         volInicial = config.getfloat("yacimiento", "volumenInicial")
 
-        # TODO leer la composicion
-        composicion = config.getfloat("yacimiento", "composicion")
+        composicion = config.["yacimiento"]["composicion"].split()
+        if len(composicion) != 3:
+            raise ValueError("La composicion debe ser [Gas Agua Petroleo]")
+        composicion = Composicion(*map(float, composicion))
 
         yacim = Yacimiento(parcelas=parcelas, volumenInicial=volInicial,
                            composicion=composicion)

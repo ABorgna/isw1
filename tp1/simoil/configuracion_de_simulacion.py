@@ -15,7 +15,7 @@ class ConfiguracionDeSimulacion(object):
             costoLitroAgua,
             precioMetroCubicoDePetroleo,
             precioMetroCubicoDeGas,
-            composicionCritica,
+            concentracionCritica,
             tiposDeRig,
             tiposDePlantaSeparadora,
             tiposDeTanqueDeAgua,
@@ -36,7 +36,7 @@ class ConfiguracionDeSimulacion(object):
         self.costoLitroAgua = costoLitroAgua
         self.precioMetroCubicoDePetroleo = precioMetroCubicoDePetroleo
         self.precioMetroCubicoDeGas = precioMetroCubicoDeGas
-        self.composicionCritica = composicionCritica
+        self.concentracionCritica = concentracionCritica
         self.tiposDeRig = tiposDeRig
         self.tiposDePlantaSeparadora = tiposDePlantaSeparadora
         self.tiposDeTanqueDeAgua = tiposDeTanqueDeAgua

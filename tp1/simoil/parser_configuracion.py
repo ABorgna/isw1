@@ -41,8 +41,7 @@ class ParserDeConfiguracionDeSimulacion:
         config["parametros"]["costoLitroAgua"] = "10"
         config["parametros"]["precioMetroCubicoDePetroleo"] = "100"
         config["parametros"]["precioMetroCubicoDeGas"] = "10"
-        config["parametros"]["composicionCritica"] = "0.2"
-        config["parametros"]["composicionCritica"] = "0.2"
+        config["parametros"]["concentracionCritica"] = "0.35"
 
         config["rig.0"] = {}
         config["rig.0"]["metrosDiariosExcavados"] = "10"
@@ -109,8 +108,7 @@ class ParserDeConfiguracionDeSimulacion:
             "costoLitroAgua",
             "precioMetroCubicoDePetroleo",
             "precioMetroCubicoDeGas",
-            "composicionCritica",
-            "composicionCritica",
+            "concentracionCritica",
         ]
 
         params_rig = [
