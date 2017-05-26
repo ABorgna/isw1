@@ -20,7 +20,8 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
 class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
     def extraer(self, estado_de_simulacion):
-        pozos = estado_de_simulacion.yacimiento.pozosPerforados
+        yacimiento = estado_de_simulacion.yacimiento
+        pozos = yacimiento.pozosPerforados
         extraccion_total = 0
         n_pozos_habilitados = len(pozos)
 
@@ -30,8 +31,7 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
             self.logExtraccion(pozo, extraccion)
 
         a_separar = extraccion_total
-
-        composicion = estado_de_simulacion.yacimiento.composicion
+        composicion = yacimiento.composicion
 
         vol_agua_total = 0
         vol_petroleo_total = 0
@@ -65,4 +65,3 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
             tanque.almacenar(a_almacenar_en_tanque)
             vol_agua_a_almacenar -= a_almacenar_en_tanque
             if vol_agua_a_almacenar < 0: break
-
