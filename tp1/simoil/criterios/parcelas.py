@@ -26,5 +26,5 @@ class EleccionParcelasMayorPresion(CriterioEleccionParcelas):
         self.n_parcelas_seleccionadas = len(parcelas_seleccionadas)
 
         for parcela in parcelas_seleccionadas:
-            estado.excavacionesActuales.append(Excavacion(parcela))
+            estado.agregarExcavacion(Excavacion(parcela))
 
