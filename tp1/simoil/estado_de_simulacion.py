@@ -33,8 +33,8 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioEleccionParcelas.decidir_proximas_parcelas(self)
 
         self.configuracion.CriterioContratacionYUsoDeRigs.contratar_rigs(self)
-
         self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
+
 
         self.configuracion.CriterioDeConstruccionDePlantasSeparadoras.\
                 construir_plantas(self)
@@ -45,9 +45,11 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioConstruccionTanquesDeGas.\
                 construir_tanques_de_gas(self)
 
-        self.configuracion.CriterioHabilitacionPozos.extraer(self)
+        if self.configuracion.CriterioDeReinyeccion.hayQueReinyectar(self):
+            self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
+        else:
+            self.configuracion.CriterioHabilitacionPozos.extraer(self)
 
-        self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
 
         # TODO: extraer el petroleo si no se reinyectó,
         # checkear si terminaron las construcciones,
@@ -136,4 +138,3 @@ class EstadoDeSimulacion(object):
 
     def _volumenAlmacenado(self, tanques):
         return sum(t.volumenAlmacenado for t in tanques)
-

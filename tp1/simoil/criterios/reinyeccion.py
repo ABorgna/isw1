@@ -19,20 +19,20 @@ class CriterioReinyeccionSoloAguaEnTanques(CriterioDeReinyeccion):
         for tanque in estado.tanquesDeGasDisponibles:
             estado.venderGas(tanque.volumenAlmacenado)
 
-    def decidir_reinyeccion(self, estado):
-        hay_que_reinyectar = False
+    def hayQueReinyectar(self, estado):
         for pozo in estado.yacimiento.pozosPerforados:
             if pozo.presionActual < self.presion_critica:
-                hay_que_reinyectar = True
+                return True
+        return False
 
-        if hay_que_reinyectar:
-            volumen_total_agua_almacenada = 0
 
-            # TODO: checkear el limite de reinyeccion de agua
+    def decidir_reinyeccion(self, estado):
+        volumen_total_agua_almacenada = 0
 
-            for tanque in estado.tanquesDeAguaDisponibles:
-                volumen_total_agua_almacenada += tanque.volumenAlmacenado
-                tanque.retirarVolumen(tanque.volumenAlmacenado)
+        # TODO: checkear el limite de reinyeccion de agua
 
-            estado.yacimiento.reinyectar( volumen_total_agua_almacenada, 0)
+        for tanque in estado.tanquesDeAguaDisponibles:
+            volumen_total_agua_almacenada += tanque.volumenAlmacenado
+            tanque.retirarVolumen(tanque.volumenAlmacenado)
 
+        estado.yacimiento.reinyectar( volumen_total_agua_almacenada, 0)
