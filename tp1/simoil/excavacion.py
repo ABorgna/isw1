@@ -10,4 +10,4 @@ class Excavacion(object):
         self.metrosRestantes -= mts_excavados
 
     def termino(self):
-        return self.metrosRestantes == 0
+        return self.metrosRestantes <= 0
