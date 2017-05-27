@@ -1,4 +1,8 @@
+import logging
 import math as m
+
+from composicion import Composicion
+
 
 class Yacimiento:
 
@@ -22,7 +26,22 @@ class Yacimiento:
         return (m.e**-beta)
 
     def reinyectar(self, volumenAgua, volumenGas):
-        raise NotImplementedError
+        self.volumenReinyectado += (volumenAgua + volumenGas)
+        assert(self.volumenActual <= self.volumenInicial)
+
+        vol_agua = self.composicion.ratioDeAgua * self.volumenActual
+        vol_gas = self.composicion.ratioDeGas * self.volumenActual
+        vol_petroleo = self.composicion.ratioDePetroleo * self.volumenActual
+        nuevo_vol_agua = vol_agua + volumenAgua
+        nuevo_vol_gas = vol_gas + volumenGas
+        nuevo_vol_petroleo = vol_petroleo
+        self.composicion = Composicion(nuevo_vol_gas, nuevo_vol_agua,
+                                       nuevo_vol_petroleo)
+
+        self.ratioPresion = self.volumenActual / self.volumenInicial
+
+        logging.info('Se reinyectaron %f m3 de agua y %f m3 de gas' %
+                     (volumenAgua, volumenGas))
 
     @property
     def volumenActual(self):
