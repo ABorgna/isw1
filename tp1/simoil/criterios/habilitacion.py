@@ -28,7 +28,7 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
         for planta in estado.plantasDisponibles:
             a_separar_en_planta = min(planta.volumenDiarioSeparable, a_separar)
-            vol_agua, vol_petroleo, vol_gas = planta.separar(a_separar_en_planta, composicion)
+            vol_gas, vol_agua, vol_petroleo = planta.separar(a_separar_en_planta, composicion)
             vol_gas_total += vol_gas
             vol_agua_total += vol_agua
             vol_petroleo_total += vol_petroleo
