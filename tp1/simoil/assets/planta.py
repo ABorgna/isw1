@@ -9,7 +9,8 @@ class PlantaSeparadora:
         return self._modelo.volumenDiarioSeparable
 
     def separar(self, volumen, composicion):
-        # TODO checkear que no se separe mas del maximo
+        if volumen > self.volumenDiarioSeparable:
+            raise ValueError("Separando más que el volumen diario")
         return (volumen * composicion.ratioDeGas,
                 volumen * composicion.ratioDeAgua,
                 volumen * composicion.ratioDePetroleo)
