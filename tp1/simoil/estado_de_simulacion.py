@@ -147,6 +147,12 @@ class EstadoDeSimulacion(object):
 
         assert(volumen == 0)
 
+    def almacenarAgua(self, volumen):
+        self.almacenarEn(self.tanquesDeAguaDisponibles, volumen, "agua")
+
+    def almacenarGas(self, volumen):
+        self.almacenarEn(self.tanquesDeGasDisponibles, volumen, "gas")
+
     # Internals
 
     def volumenMaximoEn(self, tanques):
@@ -161,13 +167,29 @@ class EstadoDeSimulacion(object):
     def volumenSeparableEn(self, plantas):
         return sum(p.volumenDiarioSeparable for p in plantas)
 
+    def volumenDisponibleDeAgua(self):
+        return self.volumenDisponibleEn(self.tanquesDeAguaDisponibles)
+
+    def volumenDisponibleDeGas(self):
+        return self.volumenDisponibleEn(self.tanquesDeGasDisponibles)
+
     def topeVolumenExtraccion(self):
         c = self.yacimiento.composicion
-        volumen_disponible_de_agua_en_tanques = self.volumenDisponibleEn(self.tanquesDeAguaDisponibles)
-        volumen_disponible_de_gas_en_tanques = self.volumenDisponibleEn(self.tanquesDeGasDisponibles)
+        volumen_disponible_de_agua_en_tanques = self.volumenDisponibleDeAgua()
+        volumen_disponible_de_gas_en_tanques = self.volumenDisponibleDeGas()
         volumen_disponible_plantas_separadoras = self.volumenSeparableEn(self.plantasDisponibles)
         tope_agua = math.inf if c.ratioDeAgua == 0 else volumen_disponible_de_agua_en_tanques / c.ratioDeAgua
         tope_gas = math.inf if c.ratioDeGas == 0 else volumen_disponible_de_gas_en_tanques / c.ratioDeGas
         return min(volumen_disponible_plantas_separadoras, 
             tope_agua, 
             tope_gas)
+
+    def almacenarEn(self, tanques, vol_a_almacenar, string_tipo):
+        for tanque in tanques:
+            a_almacenar_en_tanque = min(tanque.volumenDisponible, vol_a_almacenar)
+            tanque.almacenarVolumen(a_almacenar_en_tanque)
+            logging.info('Se almacenaron %f m3 en el tanque de %s %d' % (a_almacenar_en_tanque, string_tipo, tanque.id))
+            vol_a_almacenar -= a_almacenar_en_tanque
+            if vol_a_almacenar < 0: break
+        if vol_a_almacenar > 0:
+            raise ValueError("No se pudo almacenar todo el " + string_tipo)
