@@ -1,4 +1,5 @@
 import logging
+import math
 
 from assets.planta import PlantaSeparadora
 from assets.rig import Rig
@@ -63,7 +64,7 @@ class EstadoDeSimulacion(object):
         if self.configuracion.CriterioDeReinyeccion.hayQueReinyectar(self):
             self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
         else:
-            self.configuracion.CriterioHabilitacionPozos.extraer(self)
+            self.configuracion.CriterioHabilitacionPozos.extraer(self, self.topeVolumenExtraccion())
 
 
         # TODO: extraer el petroleo si no se reinyectó,
@@ -156,3 +157,17 @@ class EstadoDeSimulacion(object):
 
     def volumenDisponibleEn(self, tanques):
         return sum(t.volumenDisponible for t in tanques)
+
+    def volumenSeparableEn(self, plantas):
+        return sum(p.volumenDiarioSeparable for p in plantas)
+
+    def topeVolumenExtraccion(self):
+        c = self.yacimiento.composicion
+        volumen_disponible_de_agua_en_tanques = self.volumenDisponibleEn(self.tanquesDeAguaDisponibles)
+        volumen_disponible_de_gas_en_tanques = self.volumenDisponibleEn(self.tanquesDeGasDisponibles)
+        volumen_disponible_plantas_separadoras = self.volumenSeparableEn(self.plantasDisponibles)
+        tope_agua = math.inf if c.ratioDeAgua == 0 else volumen_disponible_de_agua_en_tanques / c.ratioDeAgua
+        tope_gas = math.inf if c.ratioDeGas == 0 else volumen_disponible_de_gas_en_tanques / c.ratioDeGas
+        return min(volumen_disponible_plantas_separadoras, 
+            tope_agua, 
+            tope_gas)

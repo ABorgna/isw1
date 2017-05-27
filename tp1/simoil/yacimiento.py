@@ -18,12 +18,13 @@ class Yacimiento:
         self.ratioPresion *= self.proximoMultiplicador(nPozos)
 
     def proximoMultiplicador(self, nPozos):
-        beta = 0.1*(self.volumenActual() / self.volumenInicial) / (nPozos**(3/2))
+        beta = 0.1*(self.volumenActual / self.volumenInicial) / (nPozos**(3/2))
         return (m.e**-beta)
 
     def reinyectar(self, volumenAgua, volumenGas):
         raise NotImplementedError
 
+    @property
     def volumenActual(self):
         return self.volumenInicial - self.volumenExtraido + self.volumenReinyectado
 

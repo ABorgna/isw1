@@ -11,7 +11,7 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
             vol_a_almacenar -= a_almacenar_en_tanque
             if vol_a_almacenar < 0: break
 
-    def extraer(self, estado):
+    def extraer(self, estado, topeExtraccion):
         yacimiento = estado.yacimiento
         pozos = self.elegirPozos(estado)
         extraccion_total = 0
