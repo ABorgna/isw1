@@ -21,7 +21,7 @@ class CriterioReinyeccionSoloAguaEnTanques(CriterioDeReinyeccion):
 
     def hayQueReinyectar(self, estado):
         for pozo in estado.yacimiento.pozosPerforados:
-            if pozo.presionActual < self.presion_critica:
+            if pozo.presionActual(estado) < self.presion_critica:
                 return True
         return False
 

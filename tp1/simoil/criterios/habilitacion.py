@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
 import logging
-import math as m
 
 class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
@@ -11,7 +10,7 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
     def potencial(self, pozo, cantidad_habilitada, estado):
         a1 = estado.configuracion.alfa1
         a2 = estado.configuracion.alfa2
-        p = pozo.presionActual
+        p = pozo.presionActual(estado)
         ratio = p / cantidad_habilitada
         return a1 * ratio + a2 * (ratio ** 2)
 
@@ -26,6 +25,8 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
         pozos = yacimiento.pozosPerforados
         extraccion_total = 0
         n_pozos_habilitados = len(pozos)
+        if n_pozos_habilitados == 0:
+            return
         composicion = yacimiento.composicion
 
         capacidad_total_de_agua = 0
@@ -77,9 +78,4 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
         volumen_inicial = yacimiento.volumenInicial
         volumen_actual = yacimiento.volumenExtraido
 
-        def proximaPresion(pozo, volumen_inicial, volumen_actual, n_pozos):
-            beta = 0.1*(volumen_actual/volumen_inicial)/(n_pozos**(3/2))
-            return pozo.presionActual*(m.e**-beta)
-
-        for pozo in pozos:
-            pozo.actualizarPresion(proximaPresion(pozo, volumen_inicial, volumen_actual, n_pozos_habilitados))
+        yacimiento.terminarExtraccion(n_pozos_habilitados)

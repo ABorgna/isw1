@@ -1,3 +1,5 @@
+import math as m
+
 class Yacimiento:
 
     def __init__(self, parcelas, volumenInicial, composicion):
@@ -7,8 +9,16 @@ class Yacimiento:
 
         self.pozosPerforados = []
         self.volumenActual = volumenInicial
-        self.pozosHabilitados = 0
         self.volumenExtraido = 0
+
+        self.ratioPresion = 1.0
+
+    def terminarExtraccion(self, nPozos):
+        self.ratioPresion *= self.proximoMultiplicador(nPozos)
+
+    def proximoMultiplicador(self, nPozos):
+        beta = 0.1*(self.volumenActual / self.volumenInicial) / (nPozos**(3/2))
+        return (m.e**-beta)
 
     def reinyectar(self, volumenAgua, volumenGas):
         raise NotImplementedError
@@ -27,8 +37,5 @@ class Pozo:
         self.presionInicial = presionInicial
         self.id = id
 
-        self.presionActual = presionInicial
-
-    def actualizarPresion(self, presion):
-        self.presionActual = presion
-
+    def presionActual(self, estado):
+        return self.presionInicial * estado.yacimiento.ratioPresion
