@@ -148,8 +148,11 @@ class EstadoDeSimulacion(object):
 
     # Internals
 
-    def _volumenMaximo(self, tanques):
+    def volumenMaximoEn(self, tanques):
         return sum(t.capacidad for t in tanques)
 
-    def _volumenAlmacenado(self, tanques):
+    def volumenAlmacenadoEn(self, tanques):
         return sum(t.volumenAlmacenado for t in tanques)
+
+    def volumenDisponibleEn(self, tanques):
+        return sum(t.volumenDisponible for t in tanques)

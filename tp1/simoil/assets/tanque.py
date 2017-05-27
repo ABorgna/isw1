@@ -14,6 +14,10 @@ class Tanque:
     def volumenAlmacenado(self):
         return self._volumenAlmacenado
 
+    @property
+    def volumenDisponible(self):
+        return self.capacidad - self.volumenAlmacenado
+
     def almacenarVolumen(self, volumen):
         if volumen + self._volumenAlmacenado > self.capacidad:
             raise ValueError("Almacenado mas de lo que entra")
