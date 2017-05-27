@@ -71,4 +71,3 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
                             self._proximo_id_pozo)
                     self._proximo_id_pozo += 1
                     pozos.append(nuevo_pozo)
-

@@ -49,15 +49,3 @@ class CriterioDeAhorroDeTanquesDeGas(CriterioConstruccionTanquesDeGas):
                 estado.construirTanqueDeGas(
                         modelo_mas_rendidor, self._proximo_id)
                 self._proximo_id += 1
-
-        tanques_de_gas_sin_terminar = \
-            estado.tanquesDeGasEnConstruccion
-
-        for tanque in tanques_de_gas_sin_terminar:
-            tanques_de_gas_sin_terminar[tanque] -= 1
-            if tanques_de_gas_sin_terminar[tanque] == 0:
-                estado.tanquesDeGasDisponibles.append(tanque)
-
-        estado.tanquesDeGasEnConstruccion = \
-            {k:v for k,v in tanques_de_gas_sin_terminar.items() if v > 0}
-

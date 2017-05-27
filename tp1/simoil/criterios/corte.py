@@ -12,4 +12,4 @@ class CortePorDiaFijo(CriterioDeCorte):
         self._dia_de_corte = dia_de_corte
 
     def cortar(self, estado):
-        return estado.diaNumero >= self._dia_de_corte and estado.configuracion.concentracionCritica <= estado.yacimiento.composicion.ratioDePetroleo
+        return estado.diaNumero >= self._dia_de_corte 

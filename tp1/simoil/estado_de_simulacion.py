@@ -28,6 +28,21 @@ class EstadoDeSimulacion(object):
         self.diaNumero += 1
         logging.info("---- dia número: "+ str(self.diaNumero))
 
+        def decrementarDias(coleccion_en_progreso, coleccion_final):
+            for item in coleccion_en_progreso:
+                coleccion_en_progreso[item] -= 1
+                if coleccion_en_progreso[item] == 0:
+                    coleccion_final.append(item)
+            coleccion_en_progreso = {k: v for k, v in coleccion_en_progreso.items() if v > 0}
+
+        decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles)
+        decrementarDias(self.tanquesDeAguaEnConstruccion, self.tanquesDeAguaDisponibles)
+        decrementarDias(self.plantasEnConstruccion, self.plantasDisponibles)
+
+        for rigs in self.rigsAlquiladosActualmente:
+            self.rigsAlquiladosActualmente[rigs] -= 1
+        self.rigsAlquiladosActualmente = {k: v for k, v in self.rigsAlquiladosActualmente.items() if v > 0}
+
         self.configuracion.CriterioDeReinyeccion.decidir_venta_de_gas(self)
 
         self.configuracion.CriterioEleccionParcelas.decidir_proximas_parcelas(self)

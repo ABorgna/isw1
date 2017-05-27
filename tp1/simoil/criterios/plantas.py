@@ -46,14 +46,3 @@ class CriterioDeAhorroDePlantas(CriterioDeConstruccionDePlantasSeparadoras):
                 estado.construirPlantaSeparadora(
                         modelo_mas_rendidor, self._proximo_id_planta)
                 self._proximo_id_planta += 1
-
-        plantas_sin_terminar = estado.plantasEnConstruccion
-
-        for planta in plantas_sin_terminar.keys():
-            plantas_sin_terminar[planta] -= 1
-            if plantas_sin_terminar[planta] == 0:
-                estado.plantasDisponibles.append(planta)
-
-        estado.plantasEnConstruccion = \
-            {k:v for k,v in plantas_sin_terminar.items() if v > 0}
-
