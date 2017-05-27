@@ -4,6 +4,7 @@ class Excavacion(object):
         self.metrosRestantes = parcela.profundidad
 
     def excavar(self, rig):
+        assert(not self.termino())
         coeficiente = (100 - self.parcelaPerforada.resistenciaAExcavacion)/100
         mts_excavados = min(self.metrosRestantes,
                 rig.metrosDiariosExcavados*coeficiente)
