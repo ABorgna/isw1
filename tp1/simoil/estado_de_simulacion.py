@@ -130,6 +130,7 @@ class EstadoDeSimulacion(object):
         assert(volumen == 0)
 
     def venderPetroleo(self, volumen):
+        logging.info('Se vendieron %f m3 de petroleo' % (volumen))
         self.gananciasAcumuladas += \
             volumen * self.configuracion.precioMetroCubicoDePetroleo
 
