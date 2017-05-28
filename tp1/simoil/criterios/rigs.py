@@ -46,11 +46,11 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
 
             dias_necesarios = math.ceil(excavacion.parcelaPerforada.profundidad \
                     / (velocidad_del_modelo * coeficiente))
-            dias_necesarios = max(dias_necesarios,
+            total_dias = max(dias_necesarios,
                                   modelo_mas_rapido.diasDeAlquilerMinimo)
 
             rig_alquilado = estado.alquilarRIG(
-                    modelo_mas_rapido, dias_necesarios, self._proximo_id_rig)
+                    modelo_mas_rapido, total_dias, self._proximo_id_rig)
 
             for dia in range(1, dias_necesarios+1):
                 self.plan.setdefault(dia, []).append((excavacion, rig_alquilado))
