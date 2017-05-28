@@ -58,7 +58,6 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
 
     def excavar(self, estado):
         dia = estado.diaNumero
-        pozos = estado.yacimiento.pozosPerforados
 
         if dia in self.plan:
             plan_dia = self.plan[dia]
@@ -70,6 +69,6 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
                             excavacion.parcelaPerforada.presionInicial,
                             self._proximo_id_pozo)
                     self._proximo_id_pozo += 1
-                    pozos.append(nuevo_pozo)
+                    estado.agregarPozo(nuevo_pozo)
 
             estado.excavacionesActuales = [excavacion for excavacion in estado.excavacionesActuales if not excavacion.termino]

@@ -5,6 +5,8 @@ from assets.planta import PlantaSeparadora
 from assets.rig import Rig
 from assets.tanque import Tanque
 
+from excavacion import Excavacion
+
 class EstadoDeSimulacion(object):
     def __init__(self, yacimiento, configuracion):
         self.yacimiento = yacimiento
@@ -27,7 +29,7 @@ class EstadoDeSimulacion(object):
 
     def avanzarDia(self):
         self.diaNumero += 1
-        logging.info("---- dia número: "+ str(self.diaNumero))
+        logging.info("---- Día número: "+ str(self.diaNumero))
 
         def decrementarDias(coleccion_en_progreso, coleccion_final):
             for item in coleccion_en_progreso:
@@ -62,8 +64,8 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
 
 
-        if self.configuracion.CriterioDeReinyeccion.hayQueReinyectar(self):
-            self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
+        if self.configuracion.CriterioDeReinyeccion.hay_que_reinyectar(self):
+            self.configuracion.CriterioDeReinyeccion.reinyectar(self)
         else:
             self.configuracion.CriterioHabilitacionPozos.extraer(self, self.topeVolumenExtraccion())
 
@@ -114,8 +116,13 @@ class EstadoDeSimulacion(object):
 
         return tanque
 
-    def agregarExcavacion(self, excavacion):
-        self.excavacionesActuales.append(excavacion)
+    def agregarExcavacionEnParcela(self, parcela):
+        logging.info('Se encoló la excavación de un pozo en la parcela %d' % (parcela.id))
+        self.excavacionesActuales.append(Excavacion(parcela))
+
+    def agregarPozo(self, pozo):
+        logging.info('Se terminó la excavación del pozo %d' % (pozo.id))
+        self.yacimiento.pozosPerforados.append(pozo)
 
     def comprarAgua(self, volumen):
         self.costosAcumulados += volumen * self.configuracion.costoLitroAgua
@@ -129,6 +136,7 @@ class EstadoDeSimulacion(object):
                 break
 
         assert(volumen == 0)
+        logging.info('Se compraron %f m3 de agua' % (volumen))
 
     def venderPetroleo(self, volumen):
         logging.info('Se vendieron %f m3 de petroleo' % (volumen))
@@ -148,6 +156,7 @@ class EstadoDeSimulacion(object):
                 break
 
         assert(volumen == 0)
+        logging.info('Se vendieron %f m3 de gas' % (volumen))
 
     def almacenarAgua(self, volumen):
         self.almacenarEn(self.tanquesDeAguaDisponibles, volumen, "agua")

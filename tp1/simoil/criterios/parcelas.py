@@ -1,7 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-from excavacion import Excavacion
-
 class CriterioEleccionParcelas(metaclass=ABCMeta):
 
     @abstractmethod
@@ -21,4 +19,4 @@ class EleccionParcelasMayorPresion(CriterioEleccionParcelas):
                 [:self.n_parcelas]
 
             for parcela in parcelas_seleccionadas:
-                estado.agregarExcavacion(Excavacion(parcela))
+                estado.agregarExcavacionEnParcela(parcela)
