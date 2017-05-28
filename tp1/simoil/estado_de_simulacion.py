@@ -31,19 +31,22 @@ class EstadoDeSimulacion(object):
         self.diaNumero += 1
         logging.info("---- Día número: "+ str(self.diaNumero))
 
-        def decrementarDias(coleccion_en_progreso, coleccion_final):
+        def decrementarDias(coleccion_en_progreso, coleccion_final, string_tipo):
             for item in coleccion_en_progreso:
                 coleccion_en_progreso[item] -= 1
                 if coleccion_en_progreso[item] == 0:
                     coleccion_final.append(item)
+                    logging.info("Se terminó la construcción de " + string_tipo + " %d" % (item.id))
             coleccion_en_progreso = {k: v for k, v in coleccion_en_progreso.items() if v > 0}
 
-        decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles)
-        decrementarDias(self.tanquesDeAguaEnConstruccion, self.tanquesDeAguaDisponibles)
-        decrementarDias(self.plantasEnConstruccion, self.plantasDisponibles)
+        decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles, "tanque de gas")
+        decrementarDias(self.tanquesDeAguaEnConstruccion, self.tanquesDeAguaDisponibles, "tanque de agua")
+        decrementarDias(self.plantasEnConstruccion, self.plantasDisponibles, "planta separadora")
 
         for rigs in self.rigsAlquiladosActualmente:
             self.rigsAlquiladosActualmente[rigs] -= 1
+            if self.rigsAlquiladosActualmente[rigs] == 0:
+                logging.info("Se terminó el alquiler del RIG %d" % (rigs.id))
         self.rigsAlquiladosActualmente = {k: v for k, v in self.rigsAlquiladosActualmente.items() if v > 0}
 
         self.configuracion.CriterioDeReinyeccion.decidir_venta_de_gas(self)
@@ -89,7 +92,7 @@ class EstadoDeSimulacion(object):
 
         self.rigsAlquiladosActualmente[rig] = diasDeAlquiler
         self.costosAcumulados += modelo.costoDeAlquilerPorDia * diasDeAlquiler
-
+        logging.info('Se alquiló el RIG %d por %d días' % (id, diasDeAlquiler))
         return rig
 
     def construirPlantaSeparadora(self, modeloPlanta, id):
@@ -97,7 +100,7 @@ class EstadoDeSimulacion(object):
 
         self.plantasEnConstruccion[planta] = modeloPlanta.diasDeConstruccion
         self.costosAcumulados += modeloPlanta.costoDeConstruccion
-
+        logging.info('Encolada construcción de planta separadora %d' % (id))
         return planta
 
     def construirTanqueDeAgua(self, modeloTanque, id):
@@ -105,7 +108,7 @@ class EstadoDeSimulacion(object):
 
         self.tanquesDeAguaEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
-
+        logging.info('Encolada construcción de tanque de agua %d' % (id))
         return tanque
 
     def construirTanqueDeGas(self, modeloTanque, id):
@@ -113,7 +116,7 @@ class EstadoDeSimulacion(object):
 
         self.tanquesDeGasEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
-
+        logging.info('Encolada construcción de tanque de gas %d' % (id))
         return tanque
 
     def agregarExcavacionEnParcela(self, parcela):
