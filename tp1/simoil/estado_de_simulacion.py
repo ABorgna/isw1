@@ -49,17 +49,18 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioEleccionParcelas.decidir_proximas_parcelas(self)
 
         self.configuracion.CriterioContratacionYUsoDeRigs.contratar_rigs(self)
-        self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
-
 
         self.configuracion.CriterioDeConstruccionDePlantasSeparadoras.\
-                construir_plantas(self)
+        construir_plantas(self)
 
         self.configuracion.CriterioConstruccionTanquesDeAgua.\
-                construir_tanques_de_agua(self)
+        construir_tanques_de_agua(self)
 
         self.configuracion.CriterioConstruccionTanquesDeGas.\
-                construir_tanques_de_gas(self)
+        construir_tanques_de_gas(self)
+
+        self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
+
 
         if self.configuracion.CriterioDeReinyeccion.hayQueReinyectar(self):
             self.configuracion.CriterioDeReinyeccion.decidir_reinyeccion(self)
@@ -181,8 +182,8 @@ class EstadoDeSimulacion(object):
         volumen_disponible_plantas_separadoras = self.volumenSeparableEn(self.plantasDisponibles)
         tope_agua = math.inf if c.ratioDeAgua == 0 else volumen_disponible_de_agua_en_tanques / c.ratioDeAgua
         tope_gas = math.inf if c.ratioDeGas == 0 else volumen_disponible_de_gas_en_tanques / c.ratioDeGas
-        return min(volumen_disponible_plantas_separadoras, 
-            tope_agua, 
+        return min(volumen_disponible_plantas_separadoras,
+            tope_agua,
             tope_gas)
 
     def almacenarEn(self, tanques, vol_a_almacenar, string_tipo):
