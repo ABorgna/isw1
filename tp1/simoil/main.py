@@ -6,20 +6,10 @@ import logging
 import sys
 
 import criterios
-from estado_de_simulacion import EstadoDeSimulacion
 from parser_configuracion import ParserDeConfiguracionDeSimulacion
 from parser_yacimiento import ParserDeYacimientos
+from simulacion import Simulacion
 
-def simular(yacimiento, config):
-    estado = EstadoDeSimulacion(yacimiento, config)
-
-    while estado.puedeSeguir():
-        estado.avanzarDia()
-
-    logging.info("Simulacion finalizada")
-    logging.info("--------------------------------")
-    logging.info("Costo bruto: " + str(estado.costosAcumulados))
-    logging.info("Ganancia bruta: " + str(estado.gananciasAcumuladas))
 
 if __name__ == "__main__":
 
@@ -56,5 +46,5 @@ if __name__ == "__main__":
         print("Configuracion de yacimiento inválida, terminando", file=sys.stderr)
         sys.exit(2)
 
-    simular(yacim, config)
-
+    simulacion = Simulacion(yacim, config)
+    simulacion.simular()

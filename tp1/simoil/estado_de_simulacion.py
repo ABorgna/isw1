@@ -207,3 +207,6 @@ class EstadoDeSimulacion(object):
             if vol_a_almacenar < 0: break
         if vol_a_almacenar > 0:
             raise ValueError("No se pudo almacenar todo el " + string_tipo)
+
+    def gananciaNeta(self):
+        return self.gananciasAcumuladas - self.costosAcumulados
