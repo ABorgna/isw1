@@ -92,6 +92,7 @@ class EstadoDeSimulacion(object):
 
         self.rigsAlquiladosActualmente[rig] = diasDeAlquiler
         self.costosAcumulados += modelo.costoDeAlquilerPorDia * diasDeAlquiler
+        self.costosAcumulados += modelo.consumoDiario * diasDeAlquiler
         logging.info('Se alquiló el RIG %d por %d días' % (id, diasDeAlquiler))
         return rig
 
@@ -207,3 +208,4 @@ class EstadoDeSimulacion(object):
             if vol_a_almacenar < 0: break
         if vol_a_almacenar > 0:
             raise ValueError("No se pudo almacenar todo el " + string_tipo)
+
