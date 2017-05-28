@@ -31,23 +31,8 @@ class EstadoDeSimulacion(object):
         self.diaNumero += 1
         logging.info("---- Día número: "+ str(self.diaNumero))
 
-        def decrementarDias(coleccion_en_progreso, coleccion_final, string_tipo):
-            for item in coleccion_en_progreso:
-                coleccion_en_progreso[item] -= 1
-                if coleccion_en_progreso[item] == 0:
-                    coleccion_final.append(item)
-                    logging.info("Se terminó la construcción de " + string_tipo + " %d" % (item.id))
-            coleccion_en_progreso = {k: v for k, v in coleccion_en_progreso.items() if v > 0}
-
-        decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles, "tanque de gas")
-        decrementarDias(self.tanquesDeAguaEnConstruccion, self.tanquesDeAguaDisponibles, "tanque de agua")
-        decrementarDias(self.plantasEnConstruccion, self.plantasDisponibles, "planta separadora")
-
-        for rigs in self.rigsAlquiladosActualmente:
-            self.rigsAlquiladosActualmente[rigs] -= 1
-            if self.rigsAlquiladosActualmente[rigs] == 0:
-                logging.info("Se terminó el alquiler del RIG %d" % (rigs.id))
-        self.rigsAlquiladosActualmente = {k: v for k, v in self.rigsAlquiladosActualmente.items() if v > 0}
+        self.actualizarConstrucciones()
+        self.actualizarAlquileres()
 
         self.configuracion.CriterioDeReinyeccion.decidir_venta_de_gas(self)
 
@@ -66,16 +51,30 @@ class EstadoDeSimulacion(object):
 
         self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
 
-
         if self.configuracion.CriterioDeReinyeccion.hay_que_reinyectar(self):
             self.configuracion.CriterioDeReinyeccion.reinyectar(self)
         else:
             self.configuracion.CriterioHabilitacionPozos.extraer(self, self.topeVolumenExtraccion())
 
+    def actualizarConstrucciones(self):
+        def decrementarDias(coleccion_en_progreso, coleccion_final, string_tipo):
+            for item in coleccion_en_progreso:
+                coleccion_en_progreso[item] -= 1
+                if coleccion_en_progreso[item] == 0:
+                    coleccion_final.append(item)
+                    logging.info("Se terminó la construcción de " + string_tipo + " %d" % (item.id))
+            coleccion_en_progreso = {k: v for k, v in coleccion_en_progreso.items() if v > 0}
 
-        # TODO: extraer el petroleo si no se reinyectó,
-        # checkear si terminaron las construcciones,
-        # y simular todo lo que falte
+        decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles, "tanque de gas")
+        decrementarDias(self.tanquesDeAguaEnConstruccion, self.tanquesDeAguaDisponibles, "tanque de agua")
+        decrementarDias(self.plantasEnConstruccion, self.plantasDisponibles, "planta separadora")
+
+    def actualizarAlquileres(self):
+        for rigs in self.rigsAlquiladosActualmente:
+            self.rigsAlquiladosActualmente[rigs] -= 1
+            if self.rigsAlquiladosActualmente[rigs] == 0:
+                logging.info("Se terminó el alquiler del RIG %d" % (rigs.id))
+        self.rigsAlquiladosActualmente = {k: v for k, v in self.rigsAlquiladosActualmente.items() if v > 0}
 
     def puedeSeguir(self):
         cortePorCriterio = self.configuracion.CriterioDeCorte.cortar(self)
