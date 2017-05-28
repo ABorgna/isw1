@@ -49,12 +49,13 @@ class EstadoDeSimulacion(object):
         self.configuracion.CriterioConstruccionTanquesDeGas.\
         construir_tanques_de_gas(self)
 
-        self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
 
         if self.configuracion.CriterioDeReinyeccion.hay_que_reinyectar(self):
             self.configuracion.CriterioDeReinyeccion.reinyectar(self)
         else:
             self.configuracion.CriterioHabilitacionPozos.extraer(self, self.topeVolumenExtraccion())
+
+        self.configuracion.CriterioContratacionYUsoDeRigs.excavar(self)
 
     def actualizarConstrucciones(self):
         def decrementarDias(coleccion_en_progreso, coleccion_final, string_tipo):
@@ -141,7 +142,7 @@ class EstadoDeSimulacion(object):
         logging.info('Se compraron %f m3 de agua' % (volumen))
 
     def venderPetroleo(self, volumen):
-        logging.info('Se vendieron %f m3 de petroleo' % (volumen))
+        if volumen > 0: logging.info('Se vendieron %f m3 de petroleo' % (volumen))
         self.gananciasAcumuladas += \
             volumen * self.configuracion.precioMetroCubicoDePetroleo
 
@@ -149,6 +150,7 @@ class EstadoDeSimulacion(object):
         self.gananciasAcumuladas += \
             volumen * self.configuracion.precioMetroCubicoDeGas
 
+        if volumen > 0: logging.info('Se vendieron %f m3 de gas' % (volumen))
         for t in self.tanquesDeGasDisponibles:
             dVol = min(volumen, t.volumenAlmacenado)
             t.retirarVolumen(dVol)
@@ -158,7 +160,6 @@ class EstadoDeSimulacion(object):
                 break
 
         assert(volumen == 0)
-        logging.info('Se vendieron %f m3 de gas' % (volumen))
 
     def almacenarAgua(self, volumen):
         self.almacenarEn(self.tanquesDeAguaDisponibles, volumen, "agua")
