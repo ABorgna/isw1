@@ -38,9 +38,7 @@ class Yacimiento:
         self.composicion = Composicion(nuevo_vol_gas, nuevo_vol_agua,
                                        nuevo_vol_petroleo)
 
-        print("ratioPresión: {}".format(self.ratioPresion))
         self.ratioPresion = self.volumenActual / self.volumenInicial
-        print("ratioPresión: {}".format(self.ratioPresion))
         logging.info('Se reinyectaron %f m3 de agua y %f m3 de gas' %
                      (volumenAgua, volumenGas))
 
