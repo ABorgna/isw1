@@ -31,12 +31,16 @@ class CriterioReinyeccionSoloAguaEnTanques(CriterioDeReinyeccion):
 
 
     def reinyectar(self, estado):
-        volumen_total_agua_almacenada = 0
+        max_vol_reinyectable = estado.configuracion.maximoVolumenReinyectable
 
-        # TODO: checkear el limite de reinyeccion de agua
+        vol_a_reinyectar = 0
 
         for tanque in estado.tanquesDeAguaDisponibles:
-            volumen_total_agua_almacenada += tanque.volumenAlmacenado
-            tanque.retirarVolumen(tanque.volumenAlmacenado)
+            vol_a_sacar = min(max_vol_reinyectable - vol_a_reinyectar,
+                              tanque.volumenAlmacenado)
+            vol_a_reinyectar += vol_a_sacar
+            tanque.retirarVolumen(vol_a_sacar)
+            if vol_a_reinyectar >= max_vol_reinyectable:
+                break
 
-        estado.yacimiento.reinyectar( volumen_total_agua_almacenada, 0)
+        estado.yacimiento.reinyectar(vol_a_reinyectar, 0)
