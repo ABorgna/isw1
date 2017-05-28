@@ -71,3 +71,5 @@ class CriterioContratacionYUsoDeRigsMinimoTiempo(CriterioContratacionYUsoDeRigs)
                             self._proximo_id_pozo)
                     self._proximo_id_pozo += 1
                     pozos.append(nuevo_pozo)
+
+            estado.excavacionesActuales = [excavacion for excavacion in estado.excavacionesActuales if not excavacion.termino]

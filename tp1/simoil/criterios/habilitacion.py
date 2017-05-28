@@ -41,8 +41,8 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
 
         yacimiento.terminarExtraccion(extraccion_total, n_pozos_habilitados)
         estado.venderPetroleo(vol_petroleo_total)
-        estado.almacenarAgua(vol_agua)
-        estado.almacenarGas(vol_gas)
+        estado.almacenarAgua(vol_agua_total)
+        estado.almacenarGas(vol_gas_total)
 
     def logExtraccion(self, pozo, extraccion):
         logging.info('Se extrajeron %f m3 del pozo %d' % (extraccion, pozo.id))
