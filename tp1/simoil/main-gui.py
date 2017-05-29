@@ -5,6 +5,7 @@ import logging
 import remi
 import remi.gui as gui
 import sys
+import math as m
 
 from assets.modelos import *
 from configuracion_de_simulacion import ConfiguracionDeSimulacion
@@ -152,6 +153,7 @@ class SimOil(remi.App):
         for line in log_del_dia.splitlines():
             self.output_textbox.append(gui.Label(line))
 
+
     ### Cosas del input
     def init_input_yacimiento(self, container):
         row = gui.HBox()
@@ -235,6 +237,53 @@ class SimOil(remi.App):
 
             container.append(row)
 
+    def dibujar(self, estado, log_del_dia):
+
+        # Dibujar tanques
+        self.output_textbox.append(gui.Label("-Estado de tanques al finalizar el día:"))
+
+        def dibujar_tanques(tanques, string_tipo):
+            for tanque in tanques:
+                carga = int(10*tanque.volumenAlmacenado/tanque.capacidad)
+                barra = "["
+                for x in range(carga):
+                    barra += "█ "
+                for x in range(10-carga):
+                    barra += "  "
+                barra += "]"
+                self.output_textbox.append(gui.Label("Tanque de {} número {} cargado en {}/10: ".format(string_tipo, tanque.id, carga) + barra))
+
+        dibujar_tanques(estado.tanquesDeAguaDisponibles, "agua")
+        dibujar_tanques(estado.tanquesDeGasDisponibles, "gas")
+
+        # Mapa de pozos habilitados
+        self.output_textbox.append(gui.Label("-Pozos habilitados:"))
+        cantidad_de_pozos = len(estado.yacimiento.pozosPerforados)
+
+        for linea in log_del_dia.splitlines():
+            if linea.startswith("Se extrajeron"):
+                perforados[int(linea.split[-1])] = "X "
+
+        for pozo_id in range(1,cantidad_de_pozos+1):
+            if pozo_id not in perforados:
+                perforados[pozo_id] = "O "
+
+        cantidad_filas = cantidad_columnas = m.ceil((m.sqrt(cantidad_de_pozos)))
+        contador_pozos = 0
+
+        for fila in range(cantidad_filas):
+            string_fila = ""
+            for columna in range(cantidad_columnas):
+                string_fila += perforados[contador_pozos]
+                contador_pozos += 1
+                if contador_pozos == cantidad_de_pozos:
+                    break
+            # truquito para salir de nested loops con break
+            else:
+                self.output_textbox.append(gui.Label(string_fila))
+                continue  # executed if the loop ended normally (no break)
+            break # executed if 'continue' was skipped (break)
+
     ### Simular hasta el final
     def simularTodo(self, yacimiento, configuracion):
         # Setear el logger con nuestro stream
@@ -258,4 +307,3 @@ class SimOil(remi.App):
 # starts the webserver
 #remi.start(SimOil, standalone=True)
 remi.start(SimOil)
-
