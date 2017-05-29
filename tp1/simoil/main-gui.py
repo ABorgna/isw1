@@ -55,6 +55,10 @@ class SimOil(remi.App):
         self.output_container = gui.VBox()
         self.container.append(self.output_container)
 
+        self.output_dibujo = gui.VBox()
+        self.output_dibujo.style["align-items"] = "left"
+        self.output_container.append(self.output_dibujo)
+
         self.output_textbox = gui.VBox()
         self.output_textbox.style["align-items"] = "left"
         self.output_container.append(self.output_textbox)
@@ -151,6 +155,12 @@ class SimOil(remi.App):
         self.output_textbox.empty()
         for line in log_del_dia.splitlines():
             self.output_textbox.append(gui.Label(line))
+
+        self.output_dibujo.empty()
+        self.output_dibujo.append(
+            gui.Label('Ganancias acumuladas: %f' % estado.gananciasAcumuladas))
+        self.output_dibujo.append(
+            gui.Label('Costos acumulados: %f' % estado.costosAcumulados))
 
     ### Cosas del input
     def init_input_yacimiento(self, container):
