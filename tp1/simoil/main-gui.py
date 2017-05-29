@@ -275,36 +275,52 @@ class SimOil(remi.App):
         dibujar_tanques(estado.tanquesDeAguaDisponibles, "agua")
         dibujar_tanques(estado.tanquesDeGasDisponibles, "gas")
 
-        return
-
-
         # Mapa de pozos habilitados
-        self.output_textbox.append(gui.Label("-Pozos habilitados:"))
-        cantidad_de_pozos = len(estado.yacimiento.pozosPerforados)
-
-        for linea in log_del_dia.splitlines():
-            if linea.startswith("Se extrajeron"):
-                perforados[int(linea.split[-1])] = "X "
-
-        for pozo_id in range(1,cantidad_de_pozos+1):
-            if pozo_id not in perforados:
-                perforados[pozo_id] = "O "
-
-        cantidad_filas = cantidad_columnas = m.ceil((m.sqrt(cantidad_de_pozos)))
-        contador_pozos = 0
-
-        for fila in range(cantidad_filas):
-            string_fila = ""
-            for columna in range(cantidad_columnas):
-                string_fila += perforados[contador_pozos]
-                contador_pozos += 1
-                if contador_pozos == cantidad_de_pozos:
-                    break
-            # truquito para salir de nested loops con break
+        pozos = estado.yacimiento.pozosPerforados
+        def habilitado(pozo):
+            for linea in log_del_dia.splitlines():
+                if linea.startswith("Se extrajeron"):
+                    if pozo.id == int(linea.split()[-1]):
+                        return True
+            return False
+        str_pozos = 'Pozos habilitados: '
+        for pozo in pozos:
+            if habilitado(pozo):
+                str_pozos += 'X '
             else:
-                self.output_textbox.append(gui.Label(string_fila))
-                continue  # executed if the loop ended normally (no break)
-            break # executed if 'continue' was skipped (break)
+                str_pozos += 'O '
+        estado_container.append(gui.Label(str_pozos))
+
+
+        # esta version no estaba andando, voy a empezar por una mas simple
+        # perforados = {}
+
+        # estado_container.append(gui.Label("-Pozos habilitados:"))
+        # cantidad_de_pozos = len(estado.yacimiento.pozosPerforados)
+
+        # for linea in log_del_dia.splitlines():
+        #     if linea.startswith("Se extrajeron"):
+        #         perforados[int(linea.split()[-1])] = "X "
+
+        # for pozo_id in range(1,cantidad_de_pozos+1):
+        #     if pozo_id not in perforados:
+        #         perforados[pozo_id] = "O "
+
+        # cantidad_filas = cantidad_columnas = m.ceil((m.sqrt(cantidad_de_pozos)))
+        # contador_pozos = 0
+
+        # for fila in range(cantidad_filas):
+        #     string_fila = ""
+        #     for columna in range(cantidad_columnas):
+        #         string_fila += perforados[contador_pozos]
+        #         contador_pozos += 1
+        #         if contador_pozos == cantidad_de_pozos:
+        #             break
+        #     # truquito para salir de nested loops con break
+        #     else:
+        #         estado_container.append(gui.Label(string_fila))
+        #         continue  # executed if the loop ended normally (no break)
+        #     break # executed if 'continue' was skipped (break)
 
     ### Simular hasta el final
     def simularTodo(self, yacimiento, configuracion):
