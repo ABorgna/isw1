@@ -163,6 +163,8 @@ class SimOil(remi.App):
         self.output_dibujo.append(
             gui.Label('Costos acumulados: %f' % estado.costosAcumulados))
 
+        self.dibujar(estado, log_del_dia)
+
     ### Cosas del input
     def init_input_yacimiento(self, container):
         row = gui.HBox()
