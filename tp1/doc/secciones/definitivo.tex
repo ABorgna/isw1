@@ -47,7 +47,7 @@ Si bien podríamos haber hecho que la presión actual de un pozo fuera algo cono
 
 Por lo tanto, el yacimiento conoce su \emph{ratioPresión} que representa las \emph{capas de multiplicación} de la fórmula recursiva, es decir, conserva el producto de todas las actualizaciones anteriores. Cuando se llama a \emph{presiónActual} de un pozo dado un estado, se multiplica la presión inicial por el ratio. Y día a día únicamente se actualiza el ratio multiplicándolo por $e^{-\beta_i}$ con $\beta_i$ definida como está en el enunciado.
 
-Esto nos permite, en particular, que los pozos tengan esencia inmutable y que su presion esté ligada a un momento en particular de la simulación.
+Esto nos permite, en particular, que los pozos tengan esencia inmutable y que su presión esté ligada a un momento en particular de la simulación.
 \\
 
 La clase excavación representa parcelas en estado de perforación. Día  a día se actualizan los metros restantes hasta que llegan a 0, se anula la excavación y se agrega un nuevo pozo al yacimiento.
@@ -161,7 +161,7 @@ En este diagrama el estado le delega al criterio constructor de plantas de la co
 El criterio de ahorro hace lo mismo pero solamente construye considerando la mitad de todo el producto extraíble el primer día de todos los pozos. Además se elige la planta con mayor ratio performance/costo en vez de la de mayor volumen diario separable.
 \\
 
-Las mismas colaboraciones se efectuan en los criterios de tanques (tanto para agua como para gas) salvo que se aplica la composición crítica al producto del primer día. De esta manera, se preparan tanques para la mayor cantidad de producto, pero considerando la composición más diluída posible (se asume que todo lo que no sea petróleo en la composición crítica es agua o gas según el tipo de tanque construído) lo que aporta una cota máxima al volumen de cada elemnto almacenable por día. 
+Las mismas colaboraciones se efectúan en los criterios de tanques (tanto para agua como para gas) salvo que se aplica la composición crítica al producto del primer día. De esta manera, se preparan tanques para la mayor cantidad de producto, pero considerando la composición más diluida posible (se asume que todo lo que no sea petróleo en la composición crítica es agua o gas según el tipo de tanque construido) lo que aporta una cota máxima al volumen de cada elemento almacenable por día. 
 \\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -210,16 +210,16 @@ Dado que el criterio elige el primer día la cantidad necesaria para el desarrol
 \includegraphics[width=0.9\textwidth, keepaspectratio]{extraccion}
 \end{figure}
 
-Cuando el estado envía el mensaje \emph{extraer} al criterio de habilitación de pozos este último consulta al primero por el yacimiento simulado para conocer su composición (lo conoce porque se envía como self junto con el tope de volumen extraíble).
+Cuando el estado envía el mensaje \emph{extraer} al criterio de habilitación de pozos este último consulta al primero por el yacimiento simulado para conocer su composición (lo conoce porque se envía como self junto con el tope de volumen extraible).
 \\
 
 El tope de volumen el estado lo calcula sabiendo tanto el volumen separable (conocimiento que consigue de sus plantas) y almacenable tanto de agua y gas (conocimiento que consigue de sus tanques y de la composición del yacimiento) de modo que todo lo extraído sea tanto separable como almacenable (ni el gas ni el agua se pueden tirar).
 \\
 
-También se autoenvía el mensaje \emph{elegirPozos} (el cual a diferencia de \emph{extraer} es implementado por cada criterio en particualar) para saber cuáles son los pozos que tiene que iterar consultando por su potencial volumen. Por ser un criterio de habilitación total, elige los únicos dos pozos de la explotación. Si fuera la versión de N pozos de mayor presión, por ejemplo con N=1, hubiera elegido el pozo de los dos que mayor presión tuviera.
+También se autoenvía el mensaje \emph{elegirPozos} (el cual a diferencia de \emph{extraer} es implementado por cada criterio en particular) para saber cuáles son los pozos que tiene que iterar consultando por su potencial volumen. Por ser un criterio de habilitación total, elige los únicos dos pozos de la explotación. Si fuera la versión de N pozos de mayor presión, por ejemplo con N=1, hubiera elegido el pozo de los dos que mayor presión tuviera.
 \\
 
-Luego, conociendo las plantas del estado, se iteran para separar el total del producto extraído y finalmente indicandole al estado que venda el petróleo extraído y que almacene la cantidad de agua y gas extraída.
+Luego, conociendo las plantas del estado, se iteran para separar el total del producto extraído y finalmente indicándole al estado que venda el petróleo extraído y que almacene la cantidad de agua y gas extraída.
 \\
 
 Finalmente el criterio le indica al yacimiento que termine la extracción actualizando las presiones según la cantidad de pozos que se habilitó y el volumen que se extrajo.
