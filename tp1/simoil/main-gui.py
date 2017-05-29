@@ -7,6 +7,7 @@ import sys
 from configuracion_de_simulacion import ConfiguracionDeSimulacion
 import criterios
 from estado_de_simulacion import EstadoDeSimulacion
+from parser_yacimiento import ParserDeYacimientos
 from yacimiento import Yacimiento
 
 class SimOil(remi.App):
@@ -29,15 +30,20 @@ class SimOil(remi.App):
         self.input_container = gui.Widget()
         self.container.append(self.input_container)
 
+        self.init_input_yacimiento(self.input_container)
         self.init_input_params(self.input_container)
         self.init_input_criterios(self.input_container)
 
+        row = gui.HBox()
         self.input_simular_bt = gui.Button('Simular')
-
-        # setting the listener for the onclick event of the button
         self.input_simular_bt.set_on_click_listener(self.on_simu_button_pressed)
+        row.append(self.input_simular_bt)
 
-        self.input_container.append(self.input_simular_bt)
+        self.input_error_lbl = gui.Label("")
+        self.input_error_lbl.style["color"] = '#770c0c'
+        row.append(self.input_error_lbl)
+
+        self.input_container.append(row)
 
     def init_output_container(self):
         self.output_container = gui.VBox()
@@ -50,17 +56,27 @@ class SimOil(remi.App):
             for crit, select in self.input_crits_selects.items():
                 cls_name = select.get_value()
                 cls = self.input_crits[crit][cls_name]
-                cparams = self.input_crits_params[crit].split()
+
+                cparams = self.input_crits_params[crit].get_value().split()
                 cparams = map(float, cparams)
 
-                obj = cls(*cparams)
-                crits[crit] = obj
+                try:
+                    obj = cls(*cparams)
+                except TypeError:
+                    self.input_error_lbl.set_text(
+                            "Parametros invalidos para el criterio " + crit)
+                    return
 
-            print(crits.keys())
+                crits[crit] = obj
 
             params = {}
             for p, select in self.input_params_select.items():
-                params[p] = select.get_value()
+                val = select.get_value()
+                try:
+                    val = float(val)
+                except:
+                    val = 1
+                params[p] = val
 
             # TODO
             tipos = {
@@ -72,18 +88,31 @@ class SimOil(remi.App):
 
             configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
 
-            # TODO
-            yacimiento = None
+            yacim_parser = ParserDeYacimientos()
+            yacimFile = self.input_yacim_file.get_value()
+            yacimiento = yacim_parser.parsear_archivo(yacimFile)
 
             estado = EstadoDeSimulacion(yacimiento, configuracion)
 
             ## llamar a algo con el estado
 
-        except Exception as e:
-            print("Error parsing input", file=sys.stderr)
-            print(e, file=sys.stderr)
+        except:
+            self.input_error_lbl.set_text(
+                    "Error al parsear la entrada")
+            raise
 
     ### Cosas del input
+    def init_input_yacimiento(self, container):
+        row = gui.HBox()
+
+        row.append(gui.Label("Archivo de configuracion del yacimiento"))
+
+        self.input_yacim_file = gui.TextInput()
+        self.input_yacim_file.set_value("yacimiento.cfg")
+        row.append(self.input_yacim_file)
+
+        container.append(row)
+
     def init_input_params(self, container):
         self.input_params_select = {}
 
@@ -141,6 +170,8 @@ class SimOil(remi.App):
             for critName, critClass in concClasses.items():
                 dropdown.append(critName)
                 self.input_crits[absClass_name][critName] = critClass
+
+            dropdown.set_value(next(iter(concClasses.keys())))
 
             container.append(row)
 
