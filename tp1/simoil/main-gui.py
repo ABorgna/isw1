@@ -27,14 +27,24 @@ class SimOil(remi.App):
         # Se crea cuando se aprieta el boton
         self.estado_simulacion = None
 
-        self.init_input_container()
+        self.init_menu_bar(self.container)
+
+        self.panels = gui.Widget()
+        self.panels.style["align-items"] = "top"
+        self.container.append(self.panels)
+
+        self.init_input_container(self.panels)
+        self.init_output_container(self.panels)
+        self.init_log_container(self.panels)
+
+        self.show_menu_item("in")
 
         # returning the root widget
         return self.container
 
-    def init_input_container(self):
+    def init_input_container(self, container):
         self.input_container = gui.Widget()
-        self.container.append(self.input_container)
+        container.append(self.input_container)
 
         self.init_input_yacimiento(self.input_container)
         self.init_input_params(self.input_container)
@@ -50,6 +60,30 @@ class SimOil(remi.App):
         row.append(self.input_error_lbl)
 
         self.input_container.append(row)
+
+    def init_output_container(self, container):
+        self.output_container_container = gui.VBox()
+        container.append(self.output_container_container)
+
+        control_container = gui.HBox()
+
+        avanzar_dia_bt = gui.Button('Avanzar dia')
+        avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
+        control_container.append(avanzar_dia_bt)
+
+        avanzar_final_bt = gui.Button('Avanzar hasta el final')
+        avanzar_final_bt.set_on_click_listener(self.on_avanzar_final_bt_pressed)
+        control_container.append(avanzar_final_bt)
+
+        self.output_container_container.append(control_container)
+
+        self.output_container = gui.HBox()
+        self.output_container_container.append(self.output_container)
+
+    def init_log_container(self, container):
+        self.log_container = gui.VBox()
+        self.log_container.style["align-items"] = "left"
+        container.append(self.log_container)
 
     # listener function
     def on_simu_button_pressed(self, widget):
@@ -108,26 +142,15 @@ class SimOil(remi.App):
         yacimiento = ParserDeYacimientos().parsear_archivo(
             yacimiento_file)
 
+        self.show_menu_item("out")
+
         self.comenzarSimulacion(yacimiento, configuracion)
 
     def comenzarSimulacion(self, yacimiento, configuracion):
         self.estado_de_simulacion = EstadoDeSimulacion(yacimiento, configuracion)
 
-        self.container.empty()
-
-        control_container = gui.HBox()
-
-        avanzar_dia_bt = gui.Button('Avanzar dia')
-        avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
-        control_container.append(avanzar_dia_bt)
-
-        avanzar_final_bt = gui.Button('Avanzar hasta el final')
-        avanzar_final_bt.set_on_click_listener(self.on_avanzar_final_bt_pressed)
-        control_container.append(avanzar_final_bt)
-
-        self.container.append(control_container)
-        self.output_container = gui.HBox()
-        self.container.append(self.output_container)
+        self.input_container.set_enabled(False)
+        self.output_container_container.set_enabled(True)
 
         # Setear el logger con nuestro stream
         log_stream = io.StringIO()
@@ -147,13 +170,24 @@ class SimOil(remi.App):
     def on_avanzar_final_bt_pressed(self, widget):
         while self.estado_de_simulacion.puedeSeguir():
             self.estado_de_simulacion.avanzarDia()
+
         self.actualizarDibujo()
+
+        # Metemos el log completo
+        self.log_container.empty()
+        log = self.log_stream.getvalue()
+        for line in log.splitlines():
+            self.log_container.append(gui.Label(line))
 
     def actualizarDibujo(self):
         log = self.log_stream.getvalue()
         estado = self.estado_de_simulacion
         log_del_dia = log.split('----')[-1]   # TODO: eficiencia luego
         self.dibujar(estado, log_del_dia)
+
+        # Completar el panel del log completo
+        for line in log_del_dia.splitlines():
+            self.log_container.append(gui.Label(line))
 
     ### Cosas del input
     def init_input_yacimiento(self, container):
@@ -341,6 +375,58 @@ class SimOil(remi.App):
         self.output_textbox.empty()
         for line in log.splitlines():
             self.output_textbox.append(gui.Label(line))
+
+    # Menu de paneles
+    def init_menu_bar(self, container):
+        bar = gui.HBox()
+        bar.style["border-bottom"] = "1px solid #ddd"
+        bar.style["width"] = "100%"
+        bar.style["align-items"] = "left"
+        bar.style["margin-bottom"] = "20px"
+        bar.style["justify-content"] = "start"
+        container.append(bar)
+
+        title = gui.Label("SimOil")
+        title.style["font-size"] = "18px"
+        title.style["margin-right"] = "18px"
+        bar.append(title)
+
+        menu = gui.Menu()
+        menu.style["display"] = "flex"
+        bar.append(menu)
+
+        menu_in = gui.MenuItem("Nueva simulacion", id="in")
+        menu_out = gui.MenuItem("Avanzar simulacion", id="out")
+        menu_log = gui.MenuItem("Logs simulacion", id="log")
+
+        menu.append(menu_in)
+        menu.append(menu_out)
+        menu.append(menu_log)
+
+        menu_in.style["width"] = "350px"
+        menu_out.style["width"] = "350px"
+        menu_log.style["width"] = "350px"
+
+        menu_in.set_on_click_listener(self.on_nav_menu_item_click)
+        menu_out.set_on_click_listener(self.on_nav_menu_item_click)
+        menu_log.set_on_click_listener(self.on_nav_menu_item_click)
+
+    def on_nav_menu_item_click(self, widget):
+        id = widget.attributes["id"]
+        self.show_menu_item(id)
+
+    def show_menu_item(self, item):
+        self.input_container.style["display"] = "none"
+        self.output_container_container.style["display"] = "none"
+        self.log_container.style["display"] = "none"
+
+        if item == "in":
+            self.input_container.style["display"] = ""
+        if item == "out":
+            self.output_container_container.style["display"] = ""
+        if item == "log":
+            self.log_container.style["display"] = ""
+
 
 # starts the webserver
 #remi.start(SimOil, standalone=True)
