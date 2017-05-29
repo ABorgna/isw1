@@ -58,3 +58,13 @@ class CriterioHabilitacionTotal(CriterioHabilitacionPozos):
 
     def elegirPozos(self, estado):
         return estado.yacimiento.pozosPerforados
+
+
+class EleccionNPozosDeMayorPresion(CriterioHabilitacionPozos):
+    def __init__(self, N):
+        self.N = int(N)
+
+    def elegirPozos(self, estado):
+        return sorted(estado.yacimiento.pozosPerforados,
+                      key=lambda pozo: pozo.presionActual(estado),
+                      reverse=True)[:self.N]
