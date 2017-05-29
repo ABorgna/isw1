@@ -21,14 +21,13 @@ class SimOil(remi.App):
         super(SimOil, self).__init__(*args)
 
     def main(self):
-        self.container = gui.HBox()
+        self.container = gui.VBox()
         self.container.style["align-items"] = "top"
 
         # Se crea cuando se aprieta el boton
         self.estado_simulacion = None
 
         self.init_input_container()
-        self.init_output_container()
 
         # returning the root widget
         return self.container
@@ -51,18 +50,6 @@ class SimOil(remi.App):
         row.append(self.input_error_lbl)
 
         self.input_container.append(row)
-
-    def init_output_container(self):
-        self.output_container = gui.VBox()
-        self.container.append(self.output_container)
-
-        self.output_dibujo = gui.VBox()
-        self.output_dibujo.style["align-items"] = "left"
-        self.output_container.append(self.output_dibujo)
-
-        self.output_textbox = gui.VBox()
-        self.output_textbox.style["align-items"] = "left"
-        self.output_container.append(self.output_textbox)
 
     # listener function
     def on_simu_button_pressed(self, widget):
@@ -117,18 +104,26 @@ class SimOil(remi.App):
         configuracion = ParserDeConfiguracionDeSimulacion().parsear_archivo('config.cfg')
         yacimiento = ParserDeYacimientos().parsear_archivo('yacimiento.cfg')
 
+        self.comenzarSimulacion(yacimiento, configuracion)
+
+    def comenzarSimulacion(self, yacimiento, configuracion):
         self.estado_de_simulacion = EstadoDeSimulacion(yacimiento, configuracion)
 
-        row = gui.HBox()
-        self.avanzar_dia_bt = gui.Button('Avanzar dia')
-        self.avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
-        row.append(self.avanzar_dia_bt)
+        self.container.empty()
 
-        self.avanzar_final_bt = gui.Button('Avanzar hasta el final')
-        self.avanzar_final_bt.set_on_click_listener(self.on_avanzar_final_bt_pressed)
-        row.append(self.avanzar_final_bt)
+        control_container = gui.HBox()
 
-        self.input_container.append(row)
+        avanzar_dia_bt = gui.Button('Avanzar dia')
+        avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
+        control_container.append(avanzar_dia_bt)
+
+        avanzar_final_bt = gui.Button('Avanzar hasta el final')
+        avanzar_final_bt.set_on_click_listener(self.on_avanzar_final_bt_pressed)
+        control_container.append(avanzar_final_bt)
+
+        self.container.append(control_container)
+        self.output_container = gui.HBox()
+        self.container.append(self.output_container)
 
         # Setear el logger con nuestro stream
         log_stream = io.StringIO()
@@ -139,6 +134,7 @@ class SimOil(remi.App):
         logger.setLevel(logging.INFO)
 
         self.log_stream = log_stream
+        self.actualizarDibujo()
 
     def on_avanzar_dia_bt_pressed(self, widget):
         self.estado_de_simulacion.avanzarDia()
@@ -153,16 +149,6 @@ class SimOil(remi.App):
         log = self.log_stream.getvalue()
         estado = self.estado_de_simulacion
         log_del_dia = log.split('----')[-1]   # TODO: eficiencia luego
-        self.output_textbox.empty()
-        for line in log_del_dia.splitlines():
-            self.output_textbox.append(gui.Label(line))
-
-        self.output_dibujo.empty()
-        self.output_dibujo.append(
-            gui.Label('Ganancias acumuladas: %f' % estado.gananciasAcumuladas))
-        self.output_dibujo.append(
-            gui.Label('Costos acumulados: %f' % estado.costosAcumulados))
-
         self.dibujar(estado, log_del_dia)
 
     ### Cosas del input
@@ -249,9 +235,27 @@ class SimOil(remi.App):
             container.append(row)
 
     def dibujar(self, estado, log_del_dia):
+        self.output_container.empty()
+
+        estado_container = gui.VBox()
+        log_container = gui.VBox()
+        self.output_container.append(estado_container)
+        self.output_container.append(log_container)
+
+        # muestro el log del dia
+        log_container.style["align-items"] = "left"
+        self.output_container.append(log_container)
+        for line in log_del_dia.splitlines():
+            log_container.append(gui.Label(line))
+
+        # informacion financiera
+        estado_container.append(
+            gui.Label('Ingresos: $%d Costos: $%d Balance: $%d' %
+                      (estado.gananciasAcumuladas, estado.costosAcumulados,
+                       estado.gananciaNeta())))
 
         # Dibujar tanques
-        self.output_textbox.append(gui.Label("-Estado de tanques al finalizar el día:"))
+        estado_container.append(gui.Label("Estado de tanques al finalizar el día:"))
 
         def dibujar_tanques(tanques, string_tipo):
             for tanque in tanques:
@@ -262,10 +266,13 @@ class SimOil(remi.App):
                 for x in range(10-carga):
                     barra += "  "
                 barra += "]"
-                self.output_textbox.append(gui.Label("Tanque de {} número {} cargado en {}/10: ".format(string_tipo, tanque.id, carga) + barra))
+                estado_container.append(gui.Label("Tanque de {} número {} cargado en {}/10: ".format(string_tipo, tanque.id, carga) + barra))
 
         dibujar_tanques(estado.tanquesDeAguaDisponibles, "agua")
         dibujar_tanques(estado.tanquesDeGasDisponibles, "gas")
+
+        return
+
 
         # Mapa de pozos habilitados
         self.output_textbox.append(gui.Label("-Pozos habilitados:"))
