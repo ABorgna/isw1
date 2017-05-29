@@ -2,8 +2,8 @@
 import inspect
 import io
 import logging
-import remi
-import remi.gui as gui
+import lib.remi as remi
+import lib.remi.gui as gui
 import sys
 import math as m
 
