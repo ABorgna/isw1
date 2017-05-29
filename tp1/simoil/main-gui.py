@@ -1,12 +1,16 @@
 #!/usr/bin/python3
 import inspect
+import io
+import logging
 import remi
 import remi.gui as gui
 import sys
 
+from assets.modelos import *
 from configuracion_de_simulacion import ConfiguracionDeSimulacion
 import criterios
 from estado_de_simulacion import EstadoDeSimulacion
+from simulacion import Simulacion
 from parser_yacimiento import ParserDeYacimientos
 from yacimiento import Yacimiento
 
@@ -15,7 +19,8 @@ class SimOil(remi.App):
         super(SimOil, self).__init__(*args)
 
     def main(self):
-        self.container = gui.VBox()
+        self.container = gui.HBox()
+        self.container.style["align-items"] = "top"
 
         # Se crea cuando se aprieta el boton
         self.estado_simulacion = None
@@ -49,8 +54,14 @@ class SimOil(remi.App):
         self.output_container = gui.VBox()
         self.container.append(self.output_container)
 
+        self.output_textbox = gui.VBox()
+        self.output_textbox.style["align-items"] = "left"
+        self.output_container.append(self.output_textbox)
+
     # listener function
     def on_simu_button_pressed(self, widget):
+        self.input_error_lbl.set_text("")
+
         try:
             crits = {}
             for crit, select in self.input_crits_selects.items():
@@ -80,10 +91,10 @@ class SimOil(remi.App):
 
             # TODO
             tipos = {
-                    "tiposDeRig": [],
-                    "tiposDePlantaSeparadora": [],
-                    "tiposDeTanqueDeAgua": [],
-                    "tiposDeTanqueDeGas": []
+                    "tiposDeRig": [ModeloDeRIG(20,1,1,2)],
+                    "tiposDePlantaSeparadora": [ModeloDePlantaSeparadora(100,2,100)],
+                    "tiposDeTanqueDeAgua": [ModeloDeTanque(100,2,100)],
+                    "tiposDeTanqueDeGas": [ModeloDeTanque(100,2,100)]
             }
 
             configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
@@ -92,14 +103,13 @@ class SimOil(remi.App):
             yacimFile = self.input_yacim_file.get_value()
             yacimiento = yacim_parser.parsear_archivo(yacimFile)
 
-            estado = EstadoDeSimulacion(yacimiento, configuracion)
-
-            ## llamar a algo con el estado
-
         except:
             self.input_error_lbl.set_text(
                     "Error al parsear la entrada")
             raise
+
+        # Todo: simular de a pasos
+        self.simularTodo(yacimiento, configuracion)
 
     ### Cosas del input
     def init_input_yacimiento(self, container):
@@ -109,6 +119,7 @@ class SimOil(remi.App):
 
         self.input_yacim_file = gui.TextInput()
         self.input_yacim_file.set_value("yacimiento.cfg")
+        self.input_yacim_file.style["text-align"] = "right"
         row.append(self.input_yacim_file)
 
         container.append(row)
@@ -132,6 +143,7 @@ class SimOil(remi.App):
             row.append(gui.Label(p))
 
             input = gui.TextInput(hint=p)
+            input.style["text-align"] = "right"
             self.input_params_select[p] = input
             row.append(input)
 
@@ -156,13 +168,20 @@ class SimOil(remi.App):
             absClass_name, absClass = absClasses[0];
             concClasses = dict(inspect.getmembers(module, filter_conc));
 
-            row.append(gui.Label(absClass_name))
+            label = gui.Label(absClass_name)
+            label.style["flex-grow"] = "100"
+            label.style["width"] = "auto"
+            row.append(label)
 
             dropdown = gui.DropDown()
+            dropdown.style["flex-grow"] = "1"
+            dropdown.style["width"] = "auto"
             self.input_crits_selects[absClass_name] = dropdown
             row.append(dropdown)
 
             critParams = gui.TextInput(hint="Crit params")
+            critParams.style["text-align"] = "right"
+            critParams.style["width"] = "80px"
             self.input_crits_params[absClass_name] = critParams
             row.append(critParams)
 
@@ -174,6 +193,26 @@ class SimOil(remi.App):
             dropdown.set_value(next(iter(concClasses.keys())))
 
             container.append(row)
+
+    ### Simular hasta el final
+    def simularTodo(self, yacimiento, configuracion):
+        # Setear el logger con nuestro stream
+        log_stream = io.StringIO()
+        handler = logging.StreamHandler(log_stream)
+        handler.setFormatter(logging.Formatter("%(message)s"))
+        logger = logging.getLogger("simoil")
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+        # Correr la simulacion
+        sim = Simulacion(yacimiento, configuracion)
+        sim.simular()
+
+        # Mostrar la salida
+        log = log_stream.getvalue()
+        self.output_textbox.empty()
+        for line in log.splitlines():
+            self.output_textbox.append(gui.Label(line))
 
 # starts the webserver
 #remi.start(SimOil, standalone=True)

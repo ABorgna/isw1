@@ -29,7 +29,7 @@ class EstadoDeSimulacion(object):
 
     def avanzarDia(self):
         self.diaNumero += 1
-        logging.info("---- Día número: "+ str(self.diaNumero))
+        logging.getLogger("simoil").info("---- Día número: "+ str(self.diaNumero))
 
         self.actualizarConstrucciones()
         self.actualizarAlquileres()
@@ -63,7 +63,7 @@ class EstadoDeSimulacion(object):
                 coleccion_en_progreso[item] -= 1
                 if coleccion_en_progreso[item] == 0:
                     coleccion_final.append(item)
-                    logging.info("Se terminó la construcción de " + string_tipo + " %d" % (item.id))
+                    logging.getLogger("simoil").info("Se terminó la construcción de " + string_tipo + " %d" % (item.id))
             coleccion_en_progreso = {k: v for k, v in coleccion_en_progreso.items() if v > 0}
 
         decrementarDias(self.tanquesDeGasEnConstruccion, self.tanquesDeGasDisponibles, "tanque de gas")
@@ -74,7 +74,7 @@ class EstadoDeSimulacion(object):
         for rigs in self.rigsAlquiladosActualmente:
             self.rigsAlquiladosActualmente[rigs] -= 1
             if self.rigsAlquiladosActualmente[rigs] == 0:
-                logging.info("Se terminó el alquiler del RIG %d" % (rigs.id))
+                logging.getLogger("simoil").info("Se terminó el alquiler del RIG %d" % (rigs.id))
         self.rigsAlquiladosActualmente = {k: v for k, v in self.rigsAlquiladosActualmente.items() if v > 0}
 
     def puedeSeguir(self):
@@ -94,7 +94,7 @@ class EstadoDeSimulacion(object):
         self.costosAcumulados += modelo.costoDeAlquilerPorDia * diasDeAlquiler
         self.costosAcumulados += modelo.consumoDiario * \
                 self.configuracion.costoLitroCombustible * diasDeAlquiler
-        logging.info('Se alquiló el RIG %d por %d días' % (id, diasDeAlquiler))
+        logging.getLogger("simoil").info('Se alquiló el RIG %d por %d días' % (id, diasDeAlquiler))
         return rig
 
     def construirPlantaSeparadora(self, modeloPlanta, id):
@@ -102,7 +102,7 @@ class EstadoDeSimulacion(object):
 
         self.plantasEnConstruccion[planta] = modeloPlanta.diasDeConstruccion
         self.costosAcumulados += modeloPlanta.costoDeConstruccion
-        logging.info('Encolada construcción de planta separadora %d' % (id))
+        logging.getLogger("simoil").info('Encolada construcción de planta separadora %d' % (id))
         return planta
 
     def construirTanqueDeAgua(self, modeloTanque, id):
@@ -110,7 +110,7 @@ class EstadoDeSimulacion(object):
 
         self.tanquesDeAguaEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
-        logging.info('Encolada construcción de tanque de agua %d' % (id))
+        logging.getLogger("simoil").info('Encolada construcción de tanque de agua %d' % (id))
         return tanque
 
     def construirTanqueDeGas(self, modeloTanque, id):
@@ -118,15 +118,15 @@ class EstadoDeSimulacion(object):
 
         self.tanquesDeGasEnConstruccion[tanque] = modeloTanque.diasDeConstruccion
         self.costosAcumulados += modeloTanque.costoDeConstruccion
-        logging.info('Encolada construcción de tanque de gas %d' % (id))
+        logging.getLogger("simoil").info('Encolada construcción de tanque de gas %d' % (id))
         return tanque
 
     def agregarExcavacionEnParcela(self, parcela):
-        logging.info('Se encoló la excavación de un pozo en la parcela %d' % (parcela.id))
+        logging.getLogger("simoil").info('Se encoló la excavación de un pozo en la parcela %d' % (parcela.id))
         self.excavacionesActuales.append(Excavacion(parcela))
 
     def agregarPozo(self, pozo):
-        logging.info('Se terminó la excavación del pozo %d' % (pozo.id))
+        logging.getLogger("simoil").info('Se terminó la excavación del pozo %d' % (pozo.id))
         self.yacimiento.pozosPerforados.append(pozo)
 
     def comprarAgua(self, volumen):
@@ -141,10 +141,10 @@ class EstadoDeSimulacion(object):
                 break
 
         assert(volumen == 0)
-        logging.info('Se compraron %f m3 de agua' % (volumen))
+        logging.getLogger("simoil").info('Se compraron %f m3 de agua' % (volumen))
 
     def venderPetroleo(self, volumen):
-        if volumen > 0: logging.info('Se vendieron %f m3 de petroleo' % (volumen))
+        if volumen > 0: logging.getLogger("simoil").info('Se vendieron %f m3 de petroleo' % (volumen))
         self.gananciasAcumuladas += \
             volumen * self.configuracion.precioMetroCubicoDePetroleo
 
@@ -152,7 +152,7 @@ class EstadoDeSimulacion(object):
         self.gananciasAcumuladas += \
             volumen * self.configuracion.precioMetroCubicoDeGas
 
-        if volumen > 0: logging.info('Se vendieron %f m3 de gas' % (volumen))
+        if volumen > 0: logging.getLogger("simoil").info('Se vendieron %f m3 de gas' % (volumen))
         for t in self.tanquesDeGasDisponibles:
             dVol = min(volumen, t.volumenAlmacenado)
             t.retirarVolumen(dVol)
@@ -204,7 +204,7 @@ class EstadoDeSimulacion(object):
         for tanque in tanques:
             a_almacenar_en_tanque = min(tanque.volumenDisponible, vol_a_almacenar)
             tanque.almacenarVolumen(a_almacenar_en_tanque)
-            logging.info('Se almacenaron %f m3 en el tanque de %s %d' % (a_almacenar_en_tanque, string_tipo, tanque.id))
+            logging.getLogger("simoil").info('Se almacenaron %f m3 en el tanque de %s %d' % (a_almacenar_en_tanque, string_tipo, tanque.id))
             vol_a_almacenar -= a_almacenar_en_tanque
             if vol_a_almacenar < 0: break
         if vol_a_almacenar > 0:

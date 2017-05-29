@@ -11,8 +11,8 @@ class Simulacion(object):
         while self.estado.puedeSeguir():
             self.estado.avanzarDia()
 
-        logging.info("Simulacion finalizada")
-        logging.info("--------------------------------")
-        logging.info("Costo bruto: " + str(self.estado.costosAcumulados))
-        logging.info("Ganancia bruta: " + str(self.estado.gananciasAcumuladas))
-        logging.info("Ganancia neta: " + str(self.estado.gananciaNeta()))
+        logging.getLogger("simoil").info("Simulacion finalizada")
+        logging.getLogger("simoil").info("--------------------------------")
+        logging.getLogger("simoil").info("Costo bruto: " + str(self.estado.costosAcumulados))
+        logging.getLogger("simoil").info("Ganancia bruta: " + str(self.estado.gananciasAcumuladas))
+        logging.getLogger("simoil").info("Ganancia neta: " + str(self.estado.gananciaNeta()))

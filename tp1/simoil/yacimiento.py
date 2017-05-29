@@ -39,9 +39,9 @@ class Yacimiento:
                                        nuevo_vol_petroleo)
 
         self.ratioPresion = self.volumenActual / self.volumenInicial
-        logging.info('Se reinyectaron %f m3 de agua y %f m3 de gas' %
+        logging.getLogger("simoil").info('Se reinyectaron %f m3 de agua y %f m3 de gas' %
                      (volumenAgua, volumenGas))
-        logging.info('El nuevo ratio de petroleo es %f' %
+        logging.getLogger("simoil").info('El nuevo ratio de petroleo es %f' %
                      self.composicion.ratioDePetroleo)
 
     @property

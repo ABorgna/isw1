@@ -45,10 +45,10 @@ class CriterioHabilitacionPozos(metaclass=ABCMeta):
         estado.almacenarGas(vol_gas_total)
 
     def logExtraccion(self, pozo, extraccion):
-        logging.info('Se extrajeron %f m3 del pozo %d' % (extraccion, pozo.id))
+        logging.getLogger("simoil").info('Se extrajeron %f m3 del pozo %d' % (extraccion, pozo.id))
 
     def logSeparacion(self, planta, volumen):
-        logging.info('Se separaron %f m3 en la planta %d' % (volumen, planta.id))
+        logging.getLogger("simoil").info('Se separaron %f m3 en la planta %d' % (volumen, planta.id))
 
     @abstractmethod
     def elegirPozos(self, estado):
