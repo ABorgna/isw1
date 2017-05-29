@@ -11,6 +11,7 @@ from configuracion_de_simulacion import ConfiguracionDeSimulacion
 import criterios
 from estado_de_simulacion import EstadoDeSimulacion
 from simulacion import Simulacion
+from parser_configuracion import ParserDeConfiguracionDeSimulacion
 from parser_yacimiento import ParserDeYacimientos
 from yacimiento import Yacimiento
 
@@ -62,54 +63,94 @@ class SimOil(remi.App):
     def on_simu_button_pressed(self, widget):
         self.input_error_lbl.set_text("")
 
-        try:
-            crits = {}
-            for crit, select in self.input_crits_selects.items():
-                cls_name = select.get_value()
-                cls = self.input_crits[crit][cls_name]
+        # try:
+        #     crits = {}
+        #     for crit, select in self.input_crits_selects.items():
+        #         cls_name = select.get_value()
+        #         cls = self.input_crits[crit][cls_name]
 
-                cparams = self.input_crits_params[crit].get_value().split()
-                cparams = map(float, cparams)
+        #         cparams = self.input_crits_params[crit].get_value().split()
+        #         cparams = map(float, cparams)
 
-                try:
-                    obj = cls(*cparams)
-                except TypeError:
-                    self.input_error_lbl.set_text(
-                            "Parametros invalidos para el criterio " + crit)
-                    return
+        #         try:
+        #             obj = cls(*cparams)
+        #         except TypeError:
+        #             self.input_error_lbl.set_text(
+        #                     "Parametros invalidos para el criterio " + crit)
+        #             return
 
-                crits[crit] = obj
+        #         crits[crit] = obj
 
-            params = {}
-            for p, select in self.input_params_select.items():
-                val = select.get_value()
-                try:
-                    val = float(val)
-                except:
-                    val = 1
-                params[p] = val
+        #     params = {}
+        #     for p, select in self.input_params_select.items():
+        #         val = select.get_value()
+        #         try:
+        #             val = float(val)
+        #         except:
+        #             val = 1
+        #         params[p] = val
 
-            # TODO
-            tipos = {
-                    "tiposDeRig": [ModeloDeRIG(20,1,1,2)],
-                    "tiposDePlantaSeparadora": [ModeloDePlantaSeparadora(100,2,100)],
-                    "tiposDeTanqueDeAgua": [ModeloDeTanque(100,2,100)],
-                    "tiposDeTanqueDeGas": [ModeloDeTanque(100,2,100)]
-            }
+        #     # TODO
+        #     tipos = {
+        #             "tiposDeRig": [ModeloDeRIG(20,1,1,2)],
+        #             "tiposDePlantaSeparadora": [ModeloDePlantaSeparadora(100,2,100)],
+        #             "tiposDeTanqueDeAgua": [ModeloDeTanque(100,2,100)],
+        #             "tiposDeTanqueDeGas": [ModeloDeTanque(100,2,100)]
+        #     }
 
-            configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
+        #     configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
 
-            yacim_parser = ParserDeYacimientos()
-            yacimFile = self.input_yacim_file.get_value()
-            yacimiento = yacim_parser.parsear_archivo(yacimFile)
+        #     yacim_parser = ParserDeYacimientos()
+        #     yacimFile = self.input_yacim_file.get_value()
+        #     yacimiento = yacim_parser.parsear_archivo(yacimFile)
 
-        except:
-            self.input_error_lbl.set_text(
-                    "Error al parsear la entrada")
-            raise
+        # except:
+        #     self.input_error_lbl.set_text(
+        #             "Error al parsear la entrada")
+        #     raise
 
-        # Todo: simular de a pasos
-        self.simularTodo(yacimiento, configuracion)
+        configuracion = ParserDeConfiguracionDeSimulacion().parsear_archivo('config.cfg')
+        yacimiento = ParserDeYacimientos().parsear_archivo('yacimiento.cfg')
+
+        self.estado_de_simulacion = EstadoDeSimulacion(yacimiento, configuracion)
+
+        row = gui.HBox()
+        self.avanzar_dia_bt = gui.Button('Avanzar dia')
+        self.avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
+        row.append(self.avanzar_dia_bt)
+
+        self.avanzar_final_bt = gui.Button('Avanzar hasta el final')
+        self.avanzar_final_bt.set_on_click_listener(self.on_avanzar_final_bt_pressed)
+        row.append(self.avanzar_final_bt)
+
+        self.input_container.append(row)
+
+        # Setear el logger con nuestro stream
+        log_stream = io.StringIO()
+        handler = logging.StreamHandler(log_stream)
+        handler.setFormatter(logging.Formatter("%(message)s"))
+        logger = logging.getLogger("simoil")
+        logger.addHandler(handler)
+        logger.setLevel(logging.INFO)
+
+        self.log_stream = log_stream
+
+    def on_avanzar_dia_bt_pressed(self, widget):
+        self.estado_de_simulacion.avanzarDia()
+        self.actualizarDibujo()
+
+    def on_avanzar_final_bt_pressed(self, widget):
+        while self.estado_de_simulacion.puedeSeguir():
+            self.estado_de_simulacion.avanzarDia()
+        self.actualizarDibujo()
+
+    def actualizarDibujo(self):
+        log = self.log_stream.getvalue()
+        estado = self.estado_de_simulacion
+        log_del_dia = log.split('----')[-1]   # TODO: eficiencia luego
+        self.output_textbox.empty()
+        for line in log_del_dia.splitlines():
+            self.output_textbox.append(gui.Label(line))
 
     ### Cosas del input
     def init_input_yacimiento(self, container):
