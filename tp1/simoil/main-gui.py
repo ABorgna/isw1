@@ -101,8 +101,12 @@ class SimOil(remi.App):
         #             "Error al parsear la entrada")
         #     raise
 
-        configuracion = ParserDeConfiguracionDeSimulacion().parsear_archivo('config.cfg')
-        yacimiento = ParserDeYacimientos().parsear_archivo('yacimiento.cfg')
+        config_file = './pruebas/grande/config.cfg'
+        yacimiento_file = './pruebas/grande/yacimiento.cfg'
+        configuracion = ParserDeConfiguracionDeSimulacion().parsear_archivo(
+            config_file)
+        yacimiento = ParserDeYacimientos().parsear_archivo(
+            yacimiento_file)
 
         self.comenzarSimulacion(yacimiento, configuracion)
 
@@ -255,18 +259,18 @@ class SimOil(remi.App):
                        estado.gananciaNeta())))
 
         # Dibujar tanques
-        estado_container.append(gui.Label("Estado de tanques al finalizar el día:"))
-
         def dibujar_tanques(tanques, string_tipo):
             for tanque in tanques:
-                carga = int(10*tanque.volumenAlmacenado/tanque.capacidad)
-                barra = "["
-                for x in range(carga):
-                    barra += "█ "
-                for x in range(10-carga):
-                    barra += "  "
-                barra += "]"
-                estado_container.append(gui.Label("Tanque de {} número {} cargado en {}/10: ".format(string_tipo, tanque.id, carga) + barra))
+                ratio = tanque.volumenAlmacenado / tanque.capacidad
+                perc = int(ratio * 100)
+                barra = '['
+                for i in range(100):
+                    if i < perc:
+                        barra += '='
+                    else:
+                        barra += '-'
+                barra += ']'
+                estado_container.append(gui.Label("Tanque de {} número {} ".format(string_tipo, tanque.id) + barra))
 
         dibujar_tanques(estado.tanquesDeAguaDisponibles, "agua")
         dibujar_tanques(estado.tanquesDeGasDisponibles, "gas")
