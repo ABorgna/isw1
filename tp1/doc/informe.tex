@@ -89,6 +89,8 @@
 
 \renewcommand{\sectionmark}[1]{\markright{\thesection\ - #1}}
 
+\newcommand{\cuidado}{{\LARGE $\Delta$\!\!\!}{\small !}\;\;}
+
 \fancyhf{}
 
 \fancyhead[LO]{Sección \rightmark} % \thesection\
@@ -120,7 +122,7 @@
 
 
 \thispagestyle{empty}
-\materia{Ingenieria de Software 1}
+\materia{Ingeniería de Software 1}
 \submateria{Primer Cuatrimestre de 2017}
 \grupo{Grupo 3}
 \titulo{Trabajo Práctico 1}
@@ -140,8 +142,10 @@
 \newpage
 
 \input{secciones/introduccion}
-\newpage
+%\newpage
 \input{secciones/userstories}
+\newpage
+\input{secciones/design}
 
 \appendix
 
