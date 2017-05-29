@@ -89,61 +89,79 @@ class SimOil(remi.App):
     def on_simu_button_pressed(self, widget):
         self.input_error_lbl.set_text("")
 
-        # try:
-        #     crits = {}
-        #     for crit, select in self.input_crits_selects.items():
-        #         cls_name = select.get_value()
-        #         cls = self.input_crits[crit][cls_name]
+        try:
+            yacim_parser = ParserDeYacimientos()
+            yacim_file = self.input_yacim_file.get_value().strip()
+            if not len(yacim_file):
+                self.input_error_lbl.set_text("Ingrese un archivo de yacimiento")
+                return
+            yacimiento = yacim_parser.parsear_archivo(yacim_file)
 
-        #         cparams = self.input_crits_params[crit].get_value().split()
-        #         cparams = map(float, cparams)
+            config_parser = ParserDeConfiguracionDeSimulacion()
+            config_file = self.input_config_file.get_value().strip()
+            if len(config_file):
+                configuracion = config_parser.parsear_archivo(config_file)
+            else:
+                configuracion = None
 
-        #         try:
-        #             obj = cls(*cparams)
-        #         except TypeError:
-        #             self.input_error_lbl.set_text(
-        #                     "Parametros invalidos para el criterio " + crit)
-        #             return
+            assert(yacimiento is not None)
+            assert(configuracion is not None)
+        except:
+            self.input_error_lbl.set_text(
+                    "Error al leer los archivos")
+            raise
 
-        #         crits[crit] = obj
+        try:
+            crits = {}
+            for crit, select in self.input_crits_selects.items():
+                cls_name = select.get_value()
+                cls = self.input_crits[crit][cls_name]
 
-        #     params = {}
-        #     for p, select in self.input_params_select.items():
-        #         val = select.get_value()
-        #         try:
-        #             val = float(val)
-        #         except:
-        #             val = 1
-        #         params[p] = val
+                cparams = self.input_crits_params[crit].get_value().split()
+                cparams = map(float, cparams)
 
-        #     # TODO
-        #     tipos = {
-        #             "tiposDeRig": [ModeloDeRIG(20,1,1,2)],
-        #             "tiposDePlantaSeparadora": [ModeloDePlantaSeparadora(100,2,100)],
-        #             "tiposDeTanqueDeAgua": [ModeloDeTanque(100,2,100)],
-        #             "tiposDeTanqueDeGas": [ModeloDeTanque(100,2,100)]
-        #     }
+                try:
+                    obj = cls(*cparams)
+                except TypeError:
+                    self.input_error_lbl.set_text(
+                            "Parametros invalidos para el criterio " + crit)
+                    return
 
-        #     configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
+                crits[crit] = obj
 
-        #     yacim_parser = ParserDeYacimientos()
-        #     yacimFile = self.input_yacim_file.get_value()
-        #     yacimiento = yacim_parser.parsear_archivo(yacimFile)
+            params = {}
+            for p, select in self.input_params_select.items():
+                val = select.get_value()
+                try:
+                    val = float(val)
+                except:
+                    val = None
+                params[p] = val
 
-        # except:
-        #     self.input_error_lbl.set_text(
-        #             "Error al parsear la entrada")
-        #     raise
+            # TODO
+            tipos = {
+                    "tiposDeRig": [ModeloDeRIG(20,1,1,2)],
+                    "tiposDePlantaSeparadora": [ModeloDePlantaSeparadora(100,2,100)],
+                    "tiposDeTanqueDeAgua": [ModeloDeTanque(100,2,100)],
+                    "tiposDeTanqueDeGas": [ModeloDeTanque(100,2,100)]
+            }
 
-        config_file = './pruebas/grande/config.cfg'
-        yacimiento_file = './pruebas/grande/yacimiento.cfg'
-        configuracion = ParserDeConfiguracionDeSimulacion().parsear_archivo(
-            config_file)
-        yacimiento = ParserDeYacimientos().parsear_archivo(
-            yacimiento_file)
+            if configuracion is None:
+                configuracion = ConfiguracionDeSimulacion(**params, **crits, **tipos)
+            else:
+                for k,v in params.items():
+                    if v is not None:
+                        setattr(configuracion, k, v)
+
+                for k,v in crits.items():
+                    setattr(configuracion, k, v)
+
+        except:
+            self.input_error_lbl.set_text(
+                    "Error al parsear la entrada")
+            raise
 
         self.show_menu_item("out")
-
         self.comenzarSimulacion(yacimiento, configuracion)
 
     def comenzarSimulacion(self, yacimiento, configuracion):
@@ -196,9 +214,20 @@ class SimOil(remi.App):
         row.append(gui.Label("Archivo de configuracion del yacimiento"))
 
         self.input_yacim_file = gui.TextInput()
-        self.input_yacim_file.set_value("yacimiento.cfg")
+        self.input_yacim_file.set_value("./pruebas/grande/yacimiento.cfg")
         self.input_yacim_file.style["text-align"] = "right"
         row.append(self.input_yacim_file)
+
+        container.append(row)
+
+        row = gui.HBox()
+
+        row.append(gui.Label("Archivo de configuración de parámetros (opcional)"))
+
+        self.input_config_file = gui.TextInput()
+        self.input_config_file.set_value("./pruebas/grande/config.cfg")
+        self.input_config_file.style["text-align"] = "right"
+        row.append(self.input_config_file)
 
         container.append(row)
 
