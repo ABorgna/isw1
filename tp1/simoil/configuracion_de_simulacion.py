@@ -13,6 +13,7 @@ class ConfiguracionDeSimulacion(object):
             alfa2,
             maximoVolumenReinyectable,
             costoLitroAgua,
+            costoLitroCombustible,
             precioMetroCubicoDePetroleo,
             precioMetroCubicoDeGas,
             concentracionCritica,
@@ -34,6 +35,7 @@ class ConfiguracionDeSimulacion(object):
         self.alfa2 = alfa2
         self.maximoVolumenReinyectable = maximoVolumenReinyectable
         self.costoLitroAgua = costoLitroAgua
+        self.costoLitroCombustible = costoLitroCombustible
         self.precioMetroCubicoDePetroleo = precioMetroCubicoDePetroleo
         self.precioMetroCubicoDeGas = precioMetroCubicoDeGas
         self.concentracionCritica = concentracionCritica

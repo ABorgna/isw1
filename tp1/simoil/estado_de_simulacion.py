@@ -92,7 +92,8 @@ class EstadoDeSimulacion(object):
 
         self.rigsAlquiladosActualmente[rig] = diasDeAlquiler
         self.costosAcumulados += modelo.costoDeAlquilerPorDia * diasDeAlquiler
-        self.costosAcumulados += modelo.consumoDiario * diasDeAlquiler
+        self.costosAcumulados += modelo.consumoDiario * \
+                self.configuracion.costoLitroCombustible * diasDeAlquiler
         logging.info('Se alquiló el RIG %d por %d días' % (id, diasDeAlquiler))
         return rig
 

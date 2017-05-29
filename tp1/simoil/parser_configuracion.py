@@ -39,6 +39,7 @@ class ParserDeConfiguracionDeSimulacion:
         config["parametros"]["alfa2"] = "0.01"
         config["parametros"]["maximoVolumenReinyectable"] = "100"
         config["parametros"]["costoLitroAgua"] = "10"
+        config["parametros"]["costoLitroCombustible"] = "10"
         config["parametros"]["precioMetroCubicoDePetroleo"] = "100"
         config["parametros"]["precioMetroCubicoDeGas"] = "10"
         config["parametros"]["concentracionCritica"] = "0.35"
@@ -106,6 +107,7 @@ class ParserDeConfiguracionDeSimulacion:
             "alfa2",
             "maximoVolumenReinyectable",
             "costoLitroAgua",
+            "costoLitroCombustible",
             "precioMetroCubicoDePetroleo",
             "precioMetroCubicoDeGas",
             "concentracionCritica",
