@@ -27,6 +27,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     # Init the logger
+    fmt = "%(message)s"
+    logging.basicConfig(stream=args.outfile,
+            level=logging.INFO, format=fmt)
 
     configParser = ParserDeConfiguracionDeSimulacion()
     config = configParser.parsear_archivo(args.configfile)
