@@ -31,6 +31,8 @@ class SimOil(remi.App):
 
         self.panels = gui.Widget()
         self.panels.style["align-items"] = "top"
+        self.panels.style["display"] = "flex"
+        self.panels.style["justify-content"] = "space-around"
         self.container.append(self.panels)
 
         self.init_input_container(self.panels)
@@ -44,6 +46,11 @@ class SimOil(remi.App):
 
     def init_input_container(self, container):
         self.input_container = gui.Widget()
+        self.input_container.style["max-width"] = "800px"
+        self.input_container.style["align-self"] = "center"
+        self.input_container.style["border"] = "1px solid #ddd"
+        self.input_container.style["padding"] = "20px"
+        self.input_container.style["border-radius"] = "5px"
         container.append(self.input_container)
 
         self.init_input_yacimiento(self.input_container)
@@ -66,6 +73,11 @@ class SimOil(remi.App):
         container.append(self.output_container_container)
 
         control_container = gui.HBox()
+        control_container.style["width"] = "800px"
+        control_container.style["align-self"] = "center"
+        control_container.style["border"] = "1px solid #ddd"
+        control_container.style["padding"] = "20px"
+        control_container.style["border-radius"] = "5px"
 
         avanzar_dia_bt = gui.Button('Avanzar dia')
         avanzar_dia_bt.set_on_click_listener(self.on_avanzar_dia_bt_pressed)
@@ -78,6 +90,11 @@ class SimOil(remi.App):
         self.output_container_container.append(control_container)
 
         self.output_container = gui.HBox()
+        self.output_container.style["width"] = "800px"
+        self.output_container.style["align-self"] = "center"
+        self.output_container.style["border"] = "1px solid #ddd"
+        self.output_container.style["padding"] = "20px"
+        self.output_container.style["border-radius"] = "5px"
         self.output_container_container.append(self.output_container)
 
     def init_log_container(self, container):
