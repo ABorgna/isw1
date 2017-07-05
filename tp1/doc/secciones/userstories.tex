@@ -1,8 +1,9 @@
 \section{Requerimientos funcionales}
 
-\newcommand{\BV}[0]{Business Value}
+\newcommand{\BV}{Business Value}
 \newcommand{\SP}{Story Points}
 \newcommand{\US}[1]{\textbf{US #1}}
+\newcommand{\UUSS}{User Stories}
 \newcommand{\fixme}[1]{\large\textcolor{red}{#1}}
 
 \subsection{User Stories - Introducción}
@@ -13,66 +14,78 @@ Originalmente habíamos definido el backlog pensando en interacciones de input y
 Por lo tanto pensamos las User Stories partiendo de estrategias y funcionalidades que le interesarían a potenciales expertos del ministerio para que el simulador sea completo. De esta manera, descompusimos las estrategias del equipo de ingeniería en varias ramas y pensamos a qué área o experto del ministerio le interesaría poder usarlas. Esto nos permitió, además, diversificar nuestros potenciales stakeholders y tener una visión más general de los objetivos.
 \\
 
-Por ejemplo, a la gente de Geología, que conoce sobre las características físicas de las parcelas (i.e presión, profundidad, tipo de terreno y su resistencia a excavación), le interesaría que el simulador provea estrategias con distintos criterios de elección de parcelas a perforar para ver cuáles hacen mejor uso de las propiedades de los terrenos del yacimiento mejorando los resultados de la potencial explotación.
+Por ejemplo, a la gente de Geología, que conoce sobre las características físicas de las parcelas (i.e presión, profundidad, tipo de terreno y su resistencia a excavación), le interesaría que el simulador provea estrategias con distintos criterios de elección de parcelas a perforar para ver cuáles hacen mejor uso de las propiedades de los terrenos del yacimiento mejorando los resultados de la potencial explotación.\\
+
+Además de lo que son las estrategias y criterios que el simulador provería a los 
+distintos expertos, los mismos deben ser capaces de modelar y configurar el estado 
+actual de la realidad, para que el simulador conozca la situación de mercado actual, 
+o los distintos modelos de RIGs que se pueden alquilar. 
 
 \subsection{User Stories}
 
-Definimos las siguientes User Stories para un potencial Product Backlog de Scrum, con sus respectivos Story Points y Bussiness Value. Para los Story Points usamos Fibonacci Scale.
+Definimos las siguientes User Stories para un potencial Product Backlog de Scrum, con sus respectivos Story Points (SP) y Bussiness Value (BV). Para los Story Points usamos Fibonacci Scale.
 
 \begin{center}
-  \begin{tabular}{| r | p{10cm} | c | c | }
+  \begin{tabular}{| r | p{13cm} | c | c | }
     \hline
-    N° & Descripción & Business Value & Story Points\\  \hline
+    N° & Descripción & BV & SP\\  \hline
 
-    2  & COMO Ing. en Perforaciones QUIERO poder definir muchos modelos alquilables de RIGs con distintas cualidades PARA poder evaluar los distintos desempeños de excavación según modelo. & 5 & 3 \\ \hline
+      % model - old
+    1 & COMO Analista Económico QUIERO que el simulador permita establecer distintos propiedades de mercado actuales PARA poder hacer planificaciones y estimaciones monetarias a futuro realistas & 9 & 3\\ \hline
 
-    3  & COMO Ing. Químico QUIERO quiero poder definir muchos modelos alquilables de plantas separadoras con distintas cualidades PARA poder evaluar los distintos desempeños de separación según modelo & 5 & 8\\ \hline
+      % model - old
+    2 & COMO Perito del yacimiento QUIERO poder especificar con suficiente detalle las propiedades físicas de mi yacimiento PARA que la producción de los pozos sea plausible en una potencial explotación real & 9 & 3\\ \hline
 
-    3  & COMO Ing. Hidráulico QUIERO quiero poder definir muchos modelos alquilables de tanques con distintas capacidadesPARA poder evaluar los distintos desempeños de separación según modelo & 5 & 8\\ \hline
+      % model
+    3 & COMO Ing. en Perforaciones QUIERO poder fijar varios modelos alquilables de RIGs con distintas cualidades PARA poder evaluar los distintos desempeños de excavación según modelo. &  &  \\ \hline
+      
+      % model
+    4 & COMO Ing. Químico QUIERO quiero poder definir distintos modelos de plantas separadoras PARA poder evaluar los distintos rendimientos de separación de producto &  & \\ \hline
 
-    1  & COMO Geólogo QUIERO evaluar diferentes criterios de elección de parcelas a perforar PARA aprovechar las características físicas de los terrenos del yacimiento & 8 & 5\\  \hline
-
-    2  & COMO Ing. en Perforaciones QUIERO poder elegir el uso y contratación de RIGs PARA evaluar el \textit{tradeoff} entre tiempos de excavación y costos & 6 & 8\\ \hline
-
-    3  & COMO Ing. Químico QUIERO elegir tiempos y criterios de construcción de las plantas separadoras PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 5 & 8\\ \hline
-
-    4 & COMO Ing. Hidráulico QUIERO planificar la construcción de los tanques de almacenamiento de agua PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
-
-    5 & COMO Ing. Petroquímico QUIERO planificar la construcción de los tanques de almacenamiento de gas
-    PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
-
-    10 & COMO Analista Económico QUIERO poder elegir criterios de compras de agua PARA
-    tener más opciones a la hora de reinyectar & 9 & 3\\ \hline
-
-    10 & COMO Analista Económico QUIERO poder elegir criterios de ventas de gas PARA
-    ponderar tradeoff entre el rédito económico de su venta y el almacenamiento para su utilización en reinyecciones & 9 & 3\\ \hline
+      % model
+    5 & COMO Ing. Hidráulico QUIERO quiero poder definir modelos de tanques de almacenamiento de gas y agua PARA tener una mejor evaluación a la hora de elegir estrategias de almacenamiento de producto &  & \\ \hline
 
     \end{tabular}
 \end{center}
 
 \begin{center}
-  \begin{tabular}{| r | p{10cm} | c | c | }
+  \begin{tabular}{| r | p{13cm} | c | c | }
     \hline
-    N° & Descripción & Business Value & Story Points\\  \hline
+    N° & Descripción & BV & SP\\  \hline
 
-    6 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar
-    la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
+      % old
+    16 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación & 10 & 3\\ \hline
+    
+      % strategy - old
+    6 & COMO Geólogo QUIERO evaluar diferentes criterios de elección de parcelas a perforar PARA aprovechar las características físicas de los terrenos del yacimiento & 8 & 5\\  \hline
 
-    7 & COMO Ing. Petrolífero QUIERO evaluar varias metodologías de reinyección que determinen cuándo y cuánto reinyectar PARA poder aprovechar al máximo el yacimiento & 6 & 3\\ \hline
+      % strategy - old
+    7 & COMO Ing. en Perforaciones QUIERO poder elegir estrategias de uso y contratación de RIGs PARA evaluar el \textit{tradeoff} entre tiempos de excavación y costos & 6 & 8\\ \hline
 
-    8 & COMO Experto de Finanzas QUIERO poder probar distintos criterios de corte PARA saber
-    cuándo conviene terminar de explotar el yacimiento & 4 & 1\\ \hline
+      % strategy - old
+    8 & COMO Ing. Químico QUIERO elegir tiempos y criterios de construcción de las plantas separadoras PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 5 & 8\\ \hline
 
-    9 & COMO Analista Económico QUIERO que el simulador sea adaptable de acuerdo a los cambios económicos de la industria PARA poder hacer planificaciones y estimaciones a futuro  & 9 & 3\\ \hline
+      % strategy - old
+    9 & COMO Ing. Hidráulico QUIERO planificar la construcción de los tanques de almacenamiento de agua PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
 
-    10 & COMO Perito del yacimiento QUIERO poder especificar con suficiente detalle las propiedades físicas de mi yacimiento PARA que la producción de los pozos sea plausible en una potencial explotación real & 9 & 3\\ \hline
+      % strategy - old
+    10 & COMO Ing. Petroquímico QUIERO planificar la construcción de los tanques de almacenamiento de gas PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
+      
+      % strategy
+    11 & COMO Analista Económico QUIERO poder elegir criterios de compras de agua PARA tener más opciones a la hora de reinyectar & & \\ \hline
 
-    11 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular
-    la ganancia de la explotación & 10 & 3\\ \hline
+      % strategy
+    12 & COMO Analista Económico QUIERO poder elegir criterios de ventas de gas PARA ponderar \textit{tradeoff} entre el rédito económico de su venta y el almacenamiento para su utilización en reinyecciones & & \\ \hline
 
-    11 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular
-    la ganancia de la explotación & 10 & 3\\ \hline
+      % strategy - old
+    13 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
 
+      % strategy - old
+    14 & COMO Ing. Petrolífero QUIERO evaluar varias estrategias automáticas de reinyección PARA poder aprovechar al máximo el yacimiento & 6 & 3\\ \hline
+
+      % strategy - old
+    15 & COMO Experto de Finanzas QUIERO poder probar distintos criterios de corte de la simulación PARA saber cuándo conviene terminar de explotar el yacimiento & 4 & 1\\ \hline
+    
     %12 & COMO encargado de licitaciones QUIERO poder calcular el balance financiero de la explotacion PARA determinar el canon a cobrar & 9 & 3\\ \hline
   \end{tabular}
 \end{center}
@@ -82,38 +95,42 @@ Al buscar expertos de cada área como interesados en funcionalidades, las user s
 %\newpage
 \subsection{Discusión de las User Stories}
 
-Una posible alternativa que discutimos en su momento, fue la de separar en dos cada una de las stories que tratan de estrategias del equipo de ingeniería y dejar escrito, para cada una, qué estrategia específica (por ejemplo, una para un criterio de corte a los N días y otra para un criterio de corte dado una cota en la composición del yacimiento) le interesaría que provea el simulador.
+Siguiendo con lo que decíamos antes, podemos caracterizar las 
+distintas User Stories en dos grandes grupos según la funcionalidad que proveen.  
+Por un lado están las que permiten al simulador representar el estado actual de realidad, 
+por ejemplo, qué modelos de plantas existen, cómo es el yacimiento a explotar, etc.
+Por otro lado, están las que definen las distintas estrategias automáticas del 
+simulador que el equipo de ingeniería probará y combinará para evaluar la explotación 
+del yacimiento y llegar a su veredicto. \\
+
+Una posible alternativa que discutimos en su momento, fue la de separar en dos o más cada una de las stories que tratan de estrategias del equipo de ingeniería y dejar escrito, para cada una, qué estrategia específica (por ejemplo, una para un criterio de corte a los $N$ días y otra para un criterio de corte dado una cota en la composición del yacimiento) le interesaría que provea el simulador.
 
 Decidimos preservarlas unificadas porque, en caso de ser dividas, surge el hecho de que no serían completamente independientes (una vez realizada una, la implementación de la otra reutiliza mucho de la anterior) haciendo que los Story Points se vuelvan poco significativos.
 \\
 
-A continuación explayamos un poco las justificaciones que nos llevaron a esta asignación de business value y story points.
+A continuación explayamos un poco la idea de cada User Stories y las justificaciones que nos llevaron a esta asignación de business value y story points.
 
 \begin{itemize}
-  \item Para la \textbf{US 1} creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación.
+  \item Asignamos un alto \BV{} a \US 1 y \US 2 (especificación del mercado y yacimiento). Nos parece fundamental a la hora de plantear el canon para una licitación tener bien modelado los aspectos particulares del modelo: las características físicas del yacimiento y el estado del mercado petrolífero. Sin ello todo lo que hace la simulación es de poca utilidad analítica. A su vez, su implementación requiere simplemente parsear input del usuario, y no incluye ningún componente complejo.
+
+  \textbf{Nota:} Originalmente nuestro criterio para asignar BVs era pensar \emph{qué tan prioritario sería mostrarle al cliente un prototipo con dicha funcionalidad}. En cuyo caso, mostrarle una demo robusta en cuanto a estrategias pero con un contexto económico y físico fijo no resultaba tan negativo. Pero en una versión final sí era indispensable por lo mencionado anteriormente. Por lo que decidimos también adoptar un nuevo criterio de \emph{qué tan útil sigue siendo el simulador sin la funcionalidad}.
+
+  \item Para la \US{6} (elección de parcelas a perforar) creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación.
   También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias.
 
-    \item Para la \US{2} sobre el \BV, si le presentamos al cliente un simulador donde los pozos se construyen automáticamente, sin costos y sin dificultades pero el resto de las estrategias y decisiones persisten el simulador sigue siendo un producto relativamente útil.
+  \item Para la \US{7} (estrategias de RIGs) sobre el \BV{}, si le presentamos al cliente un simulador donde los pozos se construyen automáticamente, sin costos y sin dificultades pero el resto de las estrategias y decisiones persisten el simulador sigue siendo un producto relativamente útil.
 
-	Las estrategias a implementar son complejas (mts/día, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc) por tanto tiene
-    un valor alto de \SP.
+	Las estrategias a implementar son complejas (mts/día, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc) por tanto tiene un valor alto de \SP{}.
 
-	\item Hallamos similitudes entre la \US 3, \US 4 y \US 5. Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP. Con respecto al \BV, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
+	\item Hallamos similitudes entre la \US 8, \US 9 y \US{10} (construcción de plantas y tanques). Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP{}. Con respecto al \BV{}, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
 
-    \item Sobre la \US{6} creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples.
+  \item Sobre la \US{13} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples.
 
-    \item Creemos que los criterios de reinyección para la \US{7} son sencillos
-    de implementar, por ende sus bajos \SP. Al igual que otras funcionalidades,
-    no es tan fundamental para tener una buena estimación del canon,
-    dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
+  \item Creemos que los criterios de reinyección para la \US{14} son sencillos de implementar, por ende sus bajos \SP{}. Al igual que otras funcionalidades, no es tan fundamental para tener una buena estimación del canon, dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
 
-    \item En la \US{8} también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando el log para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También es casi trivial de implementar.
+  \item En la \US{15} (criterios de corte) también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando los logs para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También es casi trivial de implementar.
 
-    \item Asignamos un alto \BV{} a \US 9 y \US{10}. Nos parece fundamental a la hora de plantear el canon para una licitación tener bien modelado los aspectos particulares del modelo: las características físicas del yacimiento y el estado del mercado petrolífero. Sin ello todo lo que hace la simulación es de poca utilidad analítica. A su vez, su implementación requiere simplemente parsear input del usuario, y no incluye ningún componente complejo.
-
-    \textbf{Nota:} Originalmente nuestro criterio para asignar BVs era pensar \emph{qué tan prioritario sería mostrarle al cliente un prototipo con dicha funcionalidad}. En cuyo caso, mostrarle una demo robusta en cuanto a estrategias pero con un contexto económico y físico fijo no resultaba tan negativo. Pero en una versión final sí era indispensable por lo mencionado anteriormente. Por lo que decidimos también adoptar un nuevo criterio de \emph{qué tan útil sigue siendo el simulador sin la funcionalidad}.
-
-    \item La \US{11} tiene el \BV{} máximo. Lo primero que quiere ver el usuario al correr una simulación es el balance económico de la explotación. Con respecto a las \SP{}, se requiere llevar la cuenta día a día, pero consideramos que esto es algo bastante fácil de implementar.
+  \item La \US{16} tiene el \BV{} máximo. Lo primero que quiere ver el usuario al correr una simulación es el balance económico de la explotación. Con respecto a las \SP{}, se requiere llevar la cuenta día a día, pero consideramos que esto es algo bastante fácil de implementar.
 \end{itemize}
 
 Resulta interesante hacer énfasis en que las stories con mayor business value no son las que tratan de estrategias provistas sino sobre el contexto real del yacimiento (a nivel económico y físico) y la capacidad de analizar producción y remuneración. Esto se debe, a que desde la perspectiva del cliente, es prioritario que la simulación sea apropiada a la realidad para realizar estimaciones frente a qué tan óptimas son dichas estimaciones. Si el simulador fuera capaz de proveer estrategias óptimas aisladas de un contexto de su interés y sin proveer acceso al conteo de producción, esto no tendría absolutamente ninguna utilidad para el ministerio en su afán de estimar cánones.
@@ -121,7 +138,7 @@ Resulta interesante hacer énfasis en que las stories con mayor business value n
 \newpage
 \subsection{Desarrollo de las User Stories más importantes}
 
-En esta sección vamos a dar detalles de las descripciones, tareas, criterios de aceptación y estimación de RRHH para las User Stories que consideramos más importantes. Cabe aclarar que éstas podrían no necesariamente ser las que tengan una mayor relación de \( \frac{\BV{}}{\SP{}} \). Si bien tomamos en cuenta este criterio, consideramos que hay otros factores que hacen a una User Story más interesante para ser desarrollada.
+En esta sección vamos a dar detalles de las descripciones, tareas, criterios de aceptación y estimación de RRHH para las User Stories que consideramos más importantes. Cabe aclarar que éstas podrían no necesariamente ser las que tengan una mayor relación de \( \frac{\BV{}}{\SP{}} \). Si bien tomamos en cuenta este criterio, consideramos que hay otros factores que hacen a una User Story más interesante para ser desarrollada. Tampoco son necesariamente las primeras que deberían ser implementadas para el simulador. 
 
 Ponemos a continuación las 3 User Stories, para cada una indicamos su
 \BV{} y \SP{} respectivamente.
