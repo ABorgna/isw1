@@ -69,7 +69,7 @@ Definimos las siguientes User Stories para un potencial Product Backlog de Scrum
     10 & COMO Ing. Petroquímico QUIERO planificar la construcción de los tanques de almacenamiento de gas PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
       
       % strategy - old
-    11 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
+    11 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 8\\ \hline
 
       % strategy - old
     12 & COMO Ing. Petrolífero QUIERO evaluar varias estrategias automáticas de reinyección PARA poder aprovechar al máximo el yacimiento & 6 & 3\\ \hline
@@ -117,22 +117,21 @@ A continuación explayamos un poco la idea de cada User Stories y las justificac
 
   \item Las \US{3}, \US{4} y \US{5} presentan bastantes similitudes. Ambas son bastantes simples de implementar, siendo muy parecidas a las dos anteriores, pero además son menos parámetros los que  terminan definiendo a estos elementos, por tanto tienen valores de \SP{} un poco reducidos (salvo  las plantas procesadoras por ser un poco más complejos que los tanques). Respecto a los \BV{}, creemos que el simulador puede funcionar aceptablemente en una primera versión sin esta funcionalidad, por ejemplo si tiene fijos los modelos más usuales del mercado. Por tanto, los \BV{} son algo bajos. 
 
-  \item Para la \US{6} (elección de parcelas a perforar) creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación.
-  También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias.
+  \item Para la \US{6} (elección de parcelas a perforar) creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación. También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias.
+  
+  \item Para la \US{7} (estrategias de RIGs) sobre el \BV{}, si le presentamos al cliente un simulador donde los pozos se construyen automáticamente, sin costos y sin dificultades pero el resto de las estrategias y decisiones persisten el simulador sigue siendo un producto relativamente útil. 
 
-  \item Para la \US{7} (estrategias de RIGs) sobre el \BV{}, si le presentamos al cliente un simulador donde los pozos se construyen automáticamente, sin costos y sin dificultades pero el resto de las estrategias y decisiones persisten el simulador sigue siendo un producto relativamente útil.
-
-	Las estrategias a implementar son complejas (mts/día, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc) por tanto tiene un valor alto de \SP{}.
+	Las estrategias a implementar son complejas; hay muchas cosas a considerar, por ejemplo, la resistencia del suelo, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc. Por tanto tiene un valor alto de \SP{}.
 
 	\item Hallamos similitudes entre la \US 8, \US 9 y \US{10} (construcción de plantas y tanques). Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP{}. Con respecto al \BV{}, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
 
-  \item Sobre la \US{11} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples.
+  \item Sobre la \US{11} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderadamente alta, al igual que otras funcionalidades con estrategias múltiples, y son muchas las variables a tener en cuenta en los mismos. Además es aquí donde debe implementarse la extracción de producto en sí. Por eso los \SP{} son relativamente altos. 
 
   \item Creemos que los criterios de reinyección para la \US{12} son sencillos de implementar, por ende sus bajos \SP{}. Al igual que otras funcionalidades, no es tan fundamental para tener una buena estimación del canon, dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
 
   \item Para la \US{14} (compra de agua y venta de gas), son también relativamente sencillos de implementar, ambos tienen que ver un poco con los criterios de reinyección además. Sin embargo, son más sencillos que estos, incluso además se vuelven más fáciles si ya se los tienen implementados a los de reinyección. De modo que los \SP{} son bajos también, similares a los criterios de reinyección, pero un poco menos fundamentales que estos últimos, por tanto el \BV{} es un poco más bajo. 
 
-  \item En la \US{15} (criterios de corte) también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando los logs para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También es casi trivial de implementar.
+  \item En la \US{15} (criterios de corte) también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando los logs para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También son muy fáciles de implementar, basta con chequear un par de valores dentro de la simulación, además su resultado es simple también (cortar o no cortar), por eso sus \SP{} son bajos. 
 
   \item La \US{16} tiene el \BV{} máximo. Lo primero que quiere ver el usuario al correr una simulación es el balance económico de la explotación. Con respecto a las \SP{}, se requiere llevar la cuenta día a día, pero consideramos que esto es algo bastante fácil de implementar.
 \end{itemize}
@@ -149,7 +148,7 @@ Ponemos a continuación las 3 User Stories, para cada una indicamos su
 
 % criterio de corte
 \begin{tcolorbox}
-\textit{COMO experto de finanzas QUIERO poder probar distintos criterios de corte PARA saber cuándo conviene terminar de explotar el yacimiento [4/1]}\\
+\textit{\US{15} COMO Experto de Finanzas QUIERO poder probar distintos criterios de corte de la simulación PARA saber cuándo conviene terminar de explotar el yacimiento [4/1]}\\
 
 \textbf{Criterios de aceptación:}
 \begin{itemize}
@@ -161,14 +160,14 @@ Ponemos a continuación las 3 User Stories, para cada una indicamos su
 \begin{itemize}
 	\item Definir e implementar el modelo para la clase abstracta de
     Criterio de Corte (20').
-    \item Implementar la decisión de cortar por límite de composición. (1:20 hr)
+    \item Implementar la decisión de cortar por límite de composición. (1:20 hs)
     \item Implementar la decisión de cortar por día prefijado. (40')
 \end{itemize}
 \end{tcolorbox}
 
 % calcular produccion
 \begin{tcolorbox}
-\textit{COMO Ingeniero Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación [10/3]}\\
+\textit{\US{16} COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación [10/3]}\\
 
 \textbf{Criterios de aceptación:}
 \begin{itemize}
@@ -179,15 +178,16 @@ Ponemos a continuación las 3 User Stories, para cada una indicamos su
 
 \textbf{Tareas:}
 \begin{itemize}
-	\item Considerar distintas herramientas posibles para logging e añadir la más conveniente al proyecto. (2hs)
-    \item Agregar los llamados de logging en la finalización de cada día de simulación. (1h)
-    \item Agregar interfaces correspondientes para poder acceder a los datos necesarios a loggear. (1.5 hs)
+	\item Considerar distintas herramientas posibles para logging e añadir la más conveniente al proyecto. (2 hs)
+  \item Agregar funcionalidad global que permita a cualquier objeto loggear la información que necesite. (30')
+    \item Agregar los llamados de logging en la finalización de cada día de simulación. (1 hs)
+    \item Agregar interfaces correspondientes para poder acceder a los datos necesarios a loggear. (1 hs)
 \end{itemize}
 \end{tcolorbox}
 
 % caracteristicas yacimiento
 \begin{tcolorbox}
-\textit{COMO perito del yacimiento QUIERO poder modelar las características del yacimiento PARA que la simulación sea realista [9/3]}\\
+\textit{\US{2} COMO Perito del yacimiento QUIERO poder especificar con suficiente detalle las propiedades físicas de mi yacimiento PARA que la producción de los pozos sea plausible en una potencial explotación real [9/3]}\\
 
 \textbf{Criterios de aceptación:}
 \begin{itemize}
