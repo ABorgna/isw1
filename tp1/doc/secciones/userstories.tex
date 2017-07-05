@@ -37,13 +37,13 @@ Definimos las siguientes User Stories para un potencial Product Backlog de Scrum
     2 & COMO Perito del yacimiento QUIERO poder especificar con suficiente detalle las propiedades físicas de mi yacimiento PARA que la producción de los pozos sea plausible en una potencial explotación real & 9 & 3\\ \hline
 
       % model
-    3 & COMO Ing. en Perforaciones QUIERO poder fijar varios modelos alquilables de RIGs con distintas cualidades PARA poder evaluar los distintos desempeños de excavación según modelo. &  &  \\ \hline
+    3 & COMO Ing. en Perforaciones QUIERO poder fijar varios modelos alquilables de RIGs con distintas cualidades PARA poder evaluar los distintos desempeños de excavación según modelo. & 4 & 3 \\ \hline
       
       % model
-    4 & COMO Ing. Químico QUIERO quiero poder definir distintos modelos de plantas separadoras PARA poder evaluar los distintos rendimientos de separación de producto &  & \\ \hline
+    4 & COMO Ing. Químico QUIERO quiero poder definir distintos modelos de plantas separadoras PARA poder evaluar los distintos rendimientos de separación de producto & 4 & 2 \\ \hline
 
       % model
-    5 & COMO Ing. Hidráulico QUIERO quiero poder definir modelos de tanques de almacenamiento de gas y agua PARA tener una mejor evaluación a la hora de elegir estrategias de almacenamiento de producto &  & \\ \hline
+    5 & COMO Ing. Hidráulico QUIERO quiero poder definir modelos de tanques de almacenamiento de gas y agua PARA tener una mejor evaluación a la hora de elegir estrategias de almacenamiento de producto & 4 & 2 \\ \hline
 
     \end{tabular}
 \end{center}
@@ -53,9 +53,6 @@ Definimos las siguientes User Stories para un potencial Product Backlog de Scrum
     \hline
     N° & Descripción & BV & SP\\  \hline
 
-      % old
-    16 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación & 10 & 3\\ \hline
-    
       % strategy - old
     6 & COMO Geólogo QUIERO evaluar diferentes criterios de elección de parcelas a perforar PARA aprovechar las características físicas de los terrenos del yacimiento & 8 & 5\\  \hline
 
@@ -71,20 +68,23 @@ Definimos las siguientes User Stories para un potencial Product Backlog de Scrum
       % strategy - old
     10 & COMO Ing. Petroquímico QUIERO planificar la construcción de los tanques de almacenamiento de gas PARA conseguir resultados satisfactorios en el balance de costo, tiempo y producción & 6 & 8\\ \hline
       
-      % strategy
-    11 & COMO Analista Económico QUIERO poder elegir criterios de compras de agua PARA tener más opciones a la hora de reinyectar & & \\ \hline
-
-      % strategy
-    12 & COMO Analista Económico QUIERO poder elegir criterios de ventas de gas PARA ponderar \textit{tradeoff} entre el rédito económico de su venta y el almacenamiento para su utilización en reinyecciones & & \\ \hline
+      % strategy - old
+    11 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
 
       % strategy - old
-    13 & COMO Ing. Petrolífero QUIERO administrar la habilitación de pozos PARA controlar la presión día a día, y por lo tanto el volumen extraído de producto & 9 & 5\\ \hline
+    12 & COMO Ing. Petrolífero QUIERO evaluar varias estrategias automáticas de reinyección PARA poder aprovechar al máximo el yacimiento & 6 & 3\\ \hline
 
-      % strategy - old
-    14 & COMO Ing. Petrolífero QUIERO evaluar varias estrategias automáticas de reinyección PARA poder aprovechar al máximo el yacimiento & 6 & 3\\ \hline
+      % strategy
+    13 & COMO Analista Económico QUIERO poder elegir criterios de compras de agua PARA tener más opciones a la hora de reinyectar & 5 & 3\\ \hline
+
+      % strategy
+    14 & COMO Analista Económico QUIERO poder elegir criterios de ventas de gas PARA ponderar \textit{tradeoff} entre el rédito económico de su venta y el almacenamiento para su utilización en reinyecciones & 5 & 3\\ \hline
 
       % strategy - old
     15 & COMO Experto de Finanzas QUIERO poder probar distintos criterios de corte de la simulación PARA saber cuándo conviene terminar de explotar el yacimiento & 4 & 1\\ \hline
+
+      % old
+    16 & COMO Ing. Petrolífero QUIERO poder conocer la producción de los pozos PARA poder calcular la ganancia de la explotación & 10 & 3\\ \hline
     
     %12 & COMO encargado de licitaciones QUIERO poder calcular el balance financiero de la explotacion PARA determinar el canon a cobrar & 9 & 3\\ \hline
   \end{tabular}
@@ -111,9 +111,11 @@ Decidimos preservarlas unificadas porque, en caso de ser dividas, surge el hecho
 A continuación explayamos un poco la idea de cada User Stories y las justificaciones que nos llevaron a esta asignación de business value y story points.
 
 \begin{itemize}
-  \item Asignamos un alto \BV{} a \US 1 y \US 2 (especificación del mercado y yacimiento). Nos parece fundamental a la hora de plantear el canon para una licitación tener bien modelado los aspectos particulares del modelo: las características físicas del yacimiento y el estado del mercado petrolífero. Sin ello todo lo que hace la simulación es de poca utilidad analítica. A su vez, su implementación requiere simplemente parsear input del usuario, y no incluye ningún componente complejo.
+  \item Asignamos un alto \BV{} a \US 1 y \US 2 (especificación del mercado y yacimiento). Nos parece fundamental a la hora de plantear el canon para una licitación tener bien modelado los aspectos particulares del simulador: las características físicas del yacimiento y el estado del mercado petrolífero. Sin ello todo lo que hace la simulación es de poca utilidad analítica. A su vez, su implementación requiere simplemente tomar input del usuario, y no incluye ningún componente complejo.
 
   \textbf{Nota:} Originalmente nuestro criterio para asignar BVs era pensar \emph{qué tan prioritario sería mostrarle al cliente un prototipo con dicha funcionalidad}. En cuyo caso, mostrarle una demo robusta en cuanto a estrategias pero con un contexto económico y físico fijo no resultaba tan negativo. Pero en una versión final sí era indispensable por lo mencionado anteriormente. Por lo que decidimos también adoptar un nuevo criterio de \emph{qué tan útil sigue siendo el simulador sin la funcionalidad}.
+
+  \item Las \US{3}, \US{4} y \US{5} presentan bastantes similitudes. Ambas son bastantes simples de implementar, siendo muy parecidas a las dos anteriores, pero además son menos parámetros los que  terminan definiendo a estos elementos, por tanto tienen valores de \SP{} un poco reducidos (salvo  las plantas procesadoras por ser un poco más complejos que los tanques). Respecto a los \BV{}, creemos que el simulador puede funcionar aceptablemente en una primera versión sin esta funcionalidad, por ejemplo si tiene fijos los modelos más usuales del mercado. Por tanto, los \BV{} son algo bajos. 
 
   \item Para la \US{6} (elección de parcelas a perforar) creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación.
   También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias.
@@ -124,9 +126,11 @@ A continuación explayamos un poco la idea de cada User Stories y las justificac
 
 	\item Hallamos similitudes entre la \US 8, \US 9 y \US{10} (construcción de plantas y tanques). Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP{}. Con respecto al \BV{}, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
 
-  \item Sobre la \US{13} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples.
+  \item Sobre la \US{11} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderada, al igual que otras funcionalidades con estrategias simples.
 
-  \item Creemos que los criterios de reinyección para la \US{14} son sencillos de implementar, por ende sus bajos \SP{}. Al igual que otras funcionalidades, no es tan fundamental para tener una buena estimación del canon, dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
+  \item Creemos que los criterios de reinyección para la \US{12} son sencillos de implementar, por ende sus bajos \SP{}. Al igual que otras funcionalidades, no es tan fundamental para tener una buena estimación del canon, dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
+
+  \item Para la \US{14} (compra de agua y venta de gas), son también relativamente sencillos de implementar, ambos tienen que ver un poco con los criterios de reinyección además. Sin embargo, son más sencillos que estos, incluso además se vuelven más fáciles si ya se los tienen implementados a los de reinyección. De modo que los \SP{} son bajos también, similares a los criterios de reinyección, pero un poco menos fundamentales que estos últimos, por tanto el \BV{} es un poco más bajo. 
 
   \item En la \US{15} (criterios de corte) también nos parece que la funcionalidad es algo que puede reemplazarse temporalmente mirando los logs para estimar cuándo convenía cortar, por tanto tiene un \BV{} bajo. También es casi trivial de implementar.
 
