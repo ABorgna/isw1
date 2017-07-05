@@ -17,9 +17,9 @@ Por lo tanto pensamos las User Stories partiendo de estrategias y funcionalidade
 Por ejemplo, a la gente de Geología, que conoce sobre las características físicas de las parcelas (i.e presión, profundidad, tipo de terreno y su resistencia a excavación), le interesaría que el simulador provea estrategias con distintos criterios de elección de parcelas a perforar para ver cuáles hacen mejor uso de las propiedades de los terrenos del yacimiento mejorando los resultados de la potencial explotación.\\
 
 Además de lo que son las estrategias y criterios que el simulador provería a los 
-distintos expertos, los mismos deben ser capaces de modelar y configurar el estado 
+distintos expertos, los mismos deben ser capaces de especificar y configurar el estado 
 actual de la realidad, para que el simulador conozca la situación de mercado actual, 
-o los distintos modelos de RIGs que se pueden alquilar. 
+las propiedades del yacimiento, los distintos modelos de RIGs que se pueden alquilar, etc. 
 
 \subsection{User Stories}
 
@@ -97,11 +97,12 @@ Al buscar expertos de cada área como interesados en funcionalidades, las user s
 
 Siguiendo con lo que decíamos antes, podemos caracterizar las 
 distintas User Stories en dos grandes grupos según la funcionalidad que proveen.  
-Por un lado están las que permiten al simulador representar el estado actual de realidad, 
+Por un lado están las que permiten al simulador representar el estado actual de la realidad, 
 por ejemplo, qué modelos de plantas existen, cómo es el yacimiento a explotar, etc.
 Por otro lado, están las que definen las distintas estrategias automáticas del 
-simulador que el equipo de ingeniería probará y combinará para evaluar la explotación 
-del yacimiento y llegar a su veredicto. \\
+simulador (para perforar parcelas, habilitar pozos, reinyectar, etc) que el equipo 
+de ingeniería probará y combinará para evaluar la explotación 
+del yacimiento y llegar a un veredicto. \\
 
 Una posible alternativa que discutimos en su momento, fue la de separar en dos o más cada una de las stories que tratan de estrategias del equipo de ingeniería y dejar escrito, para cada una, qué estrategia específica (por ejemplo, una para un criterio de corte a los $N$ días y otra para un criterio de corte dado una cota en la composición del yacimiento) le interesaría que provea el simulador.
 
@@ -115,7 +116,7 @@ A continuación explayamos un poco la idea de cada User Stories y las justificac
 
   \textbf{Nota:} Originalmente nuestro criterio para asignar BVs era pensar \emph{qué tan prioritario sería mostrarle al cliente un prototipo con dicha funcionalidad}. En cuyo caso, mostrarle una demo robusta en cuanto a estrategias pero con un contexto económico y físico fijo no resultaba tan negativo. Pero en una versión final sí era indispensable por lo mencionado anteriormente. Por lo que decidimos también adoptar un nuevo criterio de \emph{qué tan útil sigue siendo el simulador sin la funcionalidad}.
 
-  \item Las \US{3}, \US{4} y \US{5} presentan bastantes similitudes. Ambas son bastantes simples de implementar, siendo muy parecidas a las dos anteriores, pero además son menos parámetros los que  terminan definiendo a estos elementos, por tanto tienen valores de \SP{} un poco reducidos (salvo  las plantas procesadoras por ser un poco más complejos que los tanques). Respecto a los \BV{}, creemos que el simulador puede funcionar aceptablemente en una primera versión sin esta funcionalidad, por ejemplo si tiene fijos los modelos más usuales del mercado. Por tanto, los \BV{} son algo bajos. 
+  \item Las \US{3}, \US{4} y \US{5} (especificación de RIGs, plantas y tanques) presentan bastantes similitudes. Todas son bastantes simples de implementar, siendo muy parecidas a las dos anteriores, pero además son menos parámetros los que terminan definiendo a estos elementos, por tanto tienen valores de \SP{} un poco reducidos (salvo  las plantas procesadoras por ser un poco más complejas). Respecto a los \BV{}, creemos que el simulador puede funcionar aceptablemente en una primera versión sin esta funcionalidad, por ejemplo si tiene fijos los modelos más usuales de RIGs, plantas y tanques del mercado. Por tanto, los \BV{} son algo bajos. 
 
   \item Para la \US{6} (elección de parcelas a perforar) creemos que el resultado de la elección de las parcelas va a ser algo muy concreto y visual para mostrar al cliente, por lo que tiene un alto business value. Además, es una base importante para el curso de la simulación. También tiene una cantidad moderada de story points porque requiere implementar al menos 2 estrategias.
   
@@ -123,9 +124,9 @@ A continuación explayamos un poco la idea de cada User Stories y las justificac
 
 	Las estrategias a implementar son complejas; hay muchas cosas a considerar, por ejemplo, la resistencia del suelo, consumo, mínima cantidad de días para alquilarlos, en qué momento, cuántos, etc. Por tanto tiene un valor alto de \SP{}.
 
-	\item Hallamos similitudes entre la \US 8, \US 9 y \US{10} (construcción de plantas y tanques). Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de las plantas procesadoras y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP{}. Con respecto al \BV{}, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras no son el cuello de botella.
+	\item Hallamos similitudes entre la \US 8, \US 9 y \US{10} (construcción de plantas y tanques). Todas requieren implementar varias estrategias que tendrán en cuenta los parámetros de los elementos y su necesidad en función de la producción diaria. Por ello, consideramos un alto valor en \SP{}. Con respecto al \BV{}, consideramos que es una parte interesante del modelo pero al mismo tiempo se podría realizar una simulación previa asumiendo que las plantas procesadoras y los tanques no son el cuello de botella.
 
-  \item Sobre la \US{11} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre las presiones y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderadamente alta, al igual que otras funcionalidades con estrategias múltiples, y son muchas las variables a tener en cuenta en los mismos. Además es aquí donde debe implementarse la extracción de producto en sí. Por eso los \SP{} son relativamente altos. 
+  \item Sobre la \US{11} (habilitación de pozos) creemos que es fundamental tener las estrategias de habilitación de pozos para el simulador (si esto fuera estático, se perdería gran control sobre la explotación del yacimiento y producción de los pozos día a día), por eso tiene uno de los \BV{} más altos. Tiene una dificultad de implementación moderadamente alta, al igual que otras funcionalidades con estrategias múltiples, y son muchas las variables a tener en cuenta en los mismos. Además es aquí donde debe implementarse la extracción de producto en sí. Por eso los \SP{} son relativamente altos. 
 
   \item Creemos que los criterios de reinyección para la \US{12} son sencillos de implementar, por ende sus bajos \SP{}. Al igual que otras funcionalidades, no es tan fundamental para tener una buena estimación del canon, dado que puede hacerse ``a mano'' en un principio. Es decir, cuando crean que es necesaria una reinyección, comenzar de nuevo una simulación con los niveles de composición y presión que crean necesarios.
 
